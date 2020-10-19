@@ -526,7 +526,7 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
             }
 
             SQLtext = SQLtext + "DELETE FROM `waypoint_data` WHERE `id` = @PATH;" + "\r\n";
-            SQLtext = SQLtext + "INSERT INTO `waypoint_data` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `delay`, `move_type`, `action`, `action_chance`, `speed`) VALUES" + "\r\n";
+            SQLtext = SQLtext + "INSERT INTO `waypoint_data` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `delay`, `move_flag`, `action`, `action_chance`) VALUES" + "\r\n";
 
             for (int i = 0; i < waypoints.Count; i++)
             {
@@ -536,11 +536,11 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
 
                 if (i < (waypoints.Count - 1))
                 {
-                    SQLtext = SQLtext + "(@PATH, " + (i + 1) + ", " + waypoint.movePosition.x.GetValueWithoutComma() + ", " + waypoint.movePosition.y.GetValueWithoutComma() + ", " + waypoint.movePosition.z.GetValueWithoutComma() + ", " + orientation.GetValueWithoutComma() + ", " + delay + ", " + Convert.ToString(creature.IsFlying ? 2 : 0) + ", " + waypoint.GetScriptId() + ", 100" + ", 0" + "),\r\n";
+                    SQLtext = SQLtext + "(@PATH, " + (i + 1) + ", " + waypoint.movePosition.x.GetValueWithoutComma() + ", " + waypoint.movePosition.y.GetValueWithoutComma() + ", " + waypoint.movePosition.z.GetValueWithoutComma() + ", " + orientation.GetValueWithoutComma() + ", " + delay + ", " + Convert.ToString(creature.IsFlying ? 2 : 0) + ", " + waypoint.GetScriptId() + ", 100),\r\n";
                 }
                 else
                 {
-                    SQLtext = SQLtext + "(@PATH, " + (i + 1) + ", " + waypoint.movePosition.x.GetValueWithoutComma() + ", " + waypoint.movePosition.y.GetValueWithoutComma() + ", " + waypoint.movePosition.z.GetValueWithoutComma() + ", " + orientation.GetValueWithoutComma() + ", " + delay + ", " + Convert.ToString(creature.IsFlying ? 2 : 0) + ", " + waypoint.GetScriptId() + ", 100" + ", 0" + ");\r\n";
+                    SQLtext = SQLtext + "(@PATH, " + (i + 1) + ", " + waypoint.movePosition.x.GetValueWithoutComma() + ", " + waypoint.movePosition.y.GetValueWithoutComma() + ", " + waypoint.movePosition.z.GetValueWithoutComma() + ", " + orientation.GetValueWithoutComma() + ", " + delay + ", " + Convert.ToString(creature.IsFlying ? 2 : 0) + ", " + waypoint.GetScriptId() + ", 100);\r\n";
                 }
             }
 

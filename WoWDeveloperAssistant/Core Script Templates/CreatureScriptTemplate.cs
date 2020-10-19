@@ -152,7 +152,7 @@ namespace WoWDeveloperAssistant.Core_Script_Templates
             string defaultName = "";
             string scriptName = "";
 
-            string creatureNameQuery = "SELECT `Name1` FROM `creature_template_wdb` WHERE `entry` = " + objectEntry + ";";
+            string creatureNameQuery = "SELECT `name` FROM `creature_template` WHERE `entry` = " + objectEntry + ";";
             var creatureNameDs = Properties.Settings.Default.UsingDB ? SQLModule.DatabaseSelectQuery(creatureNameQuery) : null;
 
             if (creatureNameDs != null)

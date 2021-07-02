@@ -169,9 +169,11 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
 
             mainForm.SetCurrentStatus("Parsing SMSG_ON_MONSTER_MOVE packets...");
 
+            bool combatMovement = Properties.Settings.Default.CombatMovement;
+
             Parallel.ForEach(movementPacketsDict.Values.AsEnumerable(), packet =>
             {
-                MonsterMovePacket movePacket = MonsterMovePacket.ParseMovementPacket(lines, packet.index, buildVersion, updateObjectPacketsDict);
+                MonsterMovePacket movePacket = MonsterMovePacket.ParseMovementPacket(lines, packet.index, buildVersion, updateObjectPacketsDict, combatMovement);
                 if (movePacket.creatureGuid != "" && (movePacket.HasWaypoints() || movePacket.HasOrientation() || movePacket.HasJump()))
                 {
                     lock (movementPacketsDict)

@@ -913,13 +913,13 @@ namespace WoWDeveloperAssistant.Misc
                 return movePacket;
             }
 
-            public static MonsterMovePacket ParseMovementPacket(string[] lines, long index, BuildVersions buildVersion, SortedDictionary<long, Packet> updateObjectPacketsDict)
+            public static MonsterMovePacket ParseMovementPacket(string[] lines, long index, BuildVersions buildVersion, SortedDictionary<long, Packet> updateObjectPacketsDict, bool combatMovement)
             {
                 MonsterMovePacket movePacket = new MonsterMovePacket("", 0.0f, LineGetters.GetTimeSpanFromLine(lines[index]), new List<Waypoint>(), 0, new Position(), new JumpInfo());
 
                 if (LineGetters.IsCreatureLine(lines[index + 1]))
                 {
-                    if (Properties.Settings.Default.CombatMovement && LineGetters.GetGuidFromLine(lines[index + 1], buildVersion, moverGuid: true) != "")
+                    if (combatMovement && LineGetters.GetGuidFromLine(lines[index + 1], buildVersion, moverGuid: true) != "")
                     {
                         string guid = LineGetters.GetGuidFromLine(lines[index + 1], buildVersion, moverGuid: true);
 
@@ -952,7 +952,7 @@ namespace WoWDeveloperAssistant.Misc
 
                     do
                     {
-                        if (Properties.Settings.Default.CombatMovement && (lines[index].Contains("FacingGUID: TypeName: Player; Full:") ||
+                        if (combatMovement && (lines[index].Contains("FacingGUID: TypeName: Player; Full:") ||
                             lines[index].Contains("FacingGUID: TypeName: Creature; Full:")))
                         {
                             movePacket.creatureGuid = "";

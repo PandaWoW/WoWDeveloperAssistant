@@ -8,6 +8,11 @@ namespace WoWDeveloperAssistant.Misc
 {
     public static class LineGetters
     {
+        public static readonly Regex dateRegex = new Regex(@"Time: (?<time>.+) Number");
+        public static readonly Regex timeRegex = new Regex(@"\d+:+\d+:+\d+");
+        public static readonly Regex entryRegex = new Regex(@"Entry:{1}\s*\d+");
+        public static readonly Regex spelRegex = new Regex(@"SpellID:{1}\s*\d+");
+
         public static string GetGuidFromLine(string line, BuildVersions buidVersion, bool objectFieldGuid = false, bool unitGuid = false, bool senderGuid = false, bool moverGuid = false, bool attackerGuid = false, bool casterGuid = false)
         {
             if (!line.Contains("TypeName: Creature; Full:") && !line.Contains("TypeName: Vehicle; Full:") && !line.Contains("TypeName: Player; Full:"))
@@ -63,37 +68,10 @@ namespace WoWDeveloperAssistant.Misc
 
         public static TimeSpan GetTimeSpanFromLine(string timeSpanLine)
         {
-            int days = 0;
-            int hours = 0;
-            int minutes = 0;
-            int seconds = 0;
-            int milliseconds = 0;
-
-            Regex dateRegex = new Regex(@"Time:{1}\s+\d+/+\d+/+\d+");
-            Regex timeRegex = new Regex(@"\d+:+\d+:+.+\s{1}Number");
-
-            if (dateRegex.IsMatch(timeSpanLine))
-            {
-                string[] date = dateRegex.Match(timeSpanLine).ToString().Replace("Time: ", "").Split('/');
-
-                days = Convert.ToInt32(date[1]);
-            }
-
-            if (timeRegex.IsMatch(timeSpanLine))
-            {
-                string[] time = timeRegex.Match(timeSpanLine).ToString().Replace(" Number", "").Split(':');
-
-                hours = Convert.ToInt32(time[0]);
-                minutes = Convert.ToInt32(time[1]);
-
-                string tempTime = time[2];
-                string[] splittedTime = tempTime.Split('.');
-
-                seconds = Convert.ToInt32(splittedTime[0]);
-                milliseconds = Convert.ToInt32(splittedTime[1]);
-            }
-
-            return new TimeSpan(days, hours, minutes, seconds, milliseconds);
+            var match = dateRegex.Match(timeSpanLine);
+            var q = match.Groups["time"].Value;
+            DateTime t = DateTime.Parse(q);
+            return new TimeSpan(t.Day, t.Hour, t.Minute, t.Second, t.Millisecond);
         }
 
         public static bool IsCreatureLine(string updateTypeLine)
@@ -108,8 +86,6 @@ namespace WoWDeveloperAssistant.Misc
 
         public static string GetPacketTimeFromStringInSeconds(string line)
         {
-            Regex timeRegex = new Regex(@"\d+:+\d+:+\d+");
-
             if (timeRegex.IsMatch(line))
             {
                 TimePacket packet;
@@ -163,8 +139,6 @@ namespace WoWDeveloperAssistant.Misc
 
         public static string GetAreatriggerEntryFromLine(string line)
         {
-            Regex entryRegex = new Regex(@"Entry:{1}\s*\d+");
-
             if (entryRegex.IsMatch(line))
             {
                 return entryRegex.Match(line).ToString().Replace("Entry: ", "");
@@ -175,11 +149,9 @@ namespace WoWDeveloperAssistant.Misc
 
         public static string GetSpellIdFromLine(string line)
         {
-            Regex entryRegex = new Regex(@"SpellID:{1}\s*\d+");
-
-            if (entryRegex.IsMatch(line))
+            if (spelRegex.IsMatch(line))
             {
-                return entryRegex.Match(line).ToString().Replace("SpellID: ", "");
+                return spelRegex.Match(line).ToString().Replace("SpellID: ", "");
             }
 
             return "";

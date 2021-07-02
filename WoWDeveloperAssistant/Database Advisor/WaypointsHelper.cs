@@ -10,6 +10,8 @@ namespace WoWDeveloperAssistant.Database_Advisor
 {
     public static class WaypointsHelper
     {
+        public static readonly Regex pointIdRegex = new Regex(@"@PATH,\s{1}\d+");
+
         public static void CreateReturnPath(TextBox textBox)
         {
             if (!textBox.Text.Contains("@PATH"))
@@ -38,7 +40,6 @@ namespace WoWDeveloperAssistant.Database_Advisor
             // Recalculate point ids
             for (int i = 1; i <= pointStrings.Count; i++)
             {
-                Regex pointIdRegex = new Regex(@"@PATH,\s{1}\d+");
                 if (pointIdRegex.IsMatch(pointStrings[i - 1]))
                 {
                     pointStrings[i - 1] = pointStrings[i - 1].Replace(pointIdRegex.Match(pointStrings[i - 1]).ToString(), "@PATH, " + i);
@@ -74,7 +75,6 @@ namespace WoWDeveloperAssistant.Database_Advisor
             // Recalculate point ids
             for (int i = 1; i <= pointStrings.Count; i++)
             {
-                Regex pointIdRegex = new Regex(@"@PATH,\s{1}\d+");
                 if (pointIdRegex.IsMatch(pointStrings[i - 1]))
                 {
                     pointStrings[i - 1] = pointStrings[i - 1].Replace(pointIdRegex.Match(pointStrings[i - 1]).ToString(), "@PATH, " + i);

@@ -160,9 +160,12 @@ namespace WoWDeveloperAssistant.Misc
             public SpellStartPacket(string guid, uint id, TimeSpan castTime, TimeSpan startTime, Position spellDest)
             { casterGuid = guid; spellId = id; spellCastTime = castTime; spellCastStartTime = startTime; spellDestination = spellDest; }
 
+            public static readonly Regex spellIdRegex = new Regex(@"SpellID:{1}\s*\d+");
+            public static readonly Regex castTimeRegex = new Regex(@"CastTime:{1}\s*\d+");
+            public static readonly Regex xyzRegex = new Regex(@"Location:\s{1}X:{1}\s{1}");
+
             public static uint GetSpellIdFromLine(string line)
             {
-                Regex spellIdRegex = new Regex(@"SpellID:{1}\s*\d+");
                 if (spellIdRegex.IsMatch(line))
                     return Convert.ToUInt32(spellIdRegex.Match(line).ToString().Replace("SpellID: ", ""));
 
@@ -171,7 +174,6 @@ namespace WoWDeveloperAssistant.Misc
 
             public static TimeSpan GetCastTimeFromLine(string line)
             {
-                Regex castTimeRegex = new Regex(@"CastTime:{1}\s*\d+");
                 int.TryParse(castTimeRegex.Match(line).ToString().Replace("CastTime: ", ""), out int castTime);
                 if (castTimeRegex.IsMatch(line) && castTime != 0)
                     return new TimeSpan(0, 0, 0, 0, castTime);
@@ -183,7 +185,6 @@ namespace WoWDeveloperAssistant.Misc
             {
                 Position destPosition = new Position();
 
-                Regex xyzRegex = new Regex(@"Location:\s{1}X:{1}\s{1}");
                 if (xyzRegex.IsMatch(line))
                 {
                     string[] splittedLine = line.Split(' ');
@@ -336,6 +337,19 @@ namespace WoWDeveloperAssistant.Misc
             public UpdateObjectPacket(uint entry, string guid, string name, int curHealth, uint maxHealth, TimeSpan time, Position spawnPos, uint? mapId, List<Waypoint> waypoints, uint? emote, uint? sheatheState, uint? standState, bool hasDisableGravity, uint moveTime, UnitFlags unitFlags, MonsterMovePacket.JumpInfo jumpInfo)
             { creatureEntry = entry; creatureGuid = guid; creatureName = name; creatureCurrentHealth = curHealth; creatureMaxHealth = maxHealth; packetSendTime = time; spawnPosition = spawnPos; this.mapId = mapId; this.waypoints = waypoints; emoteStateId = emote; this.sheatheState = sheatheState; this.standState = standState; this.hasDisableGravity = hasDisableGravity; this.moveTime = moveTime; this.unitFlags = unitFlags; this.jumpInfo = jumpInfo; }
 
+            public static readonly Regex entryRegexField = new Regex(@"EntryID:{1}\s*\d+");
+            public static readonly Regex healthRegex = new Regex(@"Health:{1}\s+\d+");
+            public static readonly Regex maxHealthRegex = new Regex(@"MaxHealth:{1}\s+\d+");
+            public static readonly Regex xyzRegex = new Regex(@"Position:\s{1}X:{1}\s{1}");
+            public static readonly Regex oriRegex = new Regex(@"Orientation:\s{1}");
+            public static readonly Regex emoteRegex = new Regex(@"EmoteState:{1}\s{1}\w+");
+            public static readonly Regex sheatheStateRegex = new Regex(@"SheatheState:{1}\s{1}\w+");
+            public static readonly Regex standstateRegex = new Regex(@"StandState:{1}\s{1}\w+");
+            public static readonly Regex durationRegex = new Regex(@"] Duration:{1}\s{1}\w+");
+            public static readonly Regex flagsRegex = new Regex(@"\(UnitData\) Flags:{1}\s{1}\w+");
+            public static readonly Regex jumpGravityRegex = new Regex(@"JumpGravity:{1}\s+.+");
+            public static readonly Regex mapRegex = new Regex(@"MapId:{1}\s{1}\d+");
+
             public static bool IsLineValidForObjectParse(string line)
             {
                 if (line == null)
@@ -358,7 +372,6 @@ namespace WoWDeveloperAssistant.Misc
 
             public static uint GetEntryFromLine(string line)
             {
-                Regex entryRegexField = new Regex(@"EntryID:{1}\s*\d+");
                 if (entryRegexField.IsMatch(line))
                     return Convert.ToUInt32(entryRegexField.Match(line).ToString().Replace("EntryID: ", ""));
                 return 0;
@@ -366,7 +379,6 @@ namespace WoWDeveloperAssistant.Misc
 
             public static int GetHealthFromLine(string line)
             {
-                Regex healthRegex = new Regex(@"Health:{1}\s+\d+");
                 if (healthRegex.IsMatch(line))
                     try
                     {
@@ -382,7 +394,6 @@ namespace WoWDeveloperAssistant.Misc
 
             public static uint GetMaxHealthFromLine(string line)
             {
-                Regex maxHealthRegex = new Regex(@"MaxHealth:{1}\s+\d+");
                 if (maxHealthRegex.IsMatch(line))
                     return Convert.ToUInt32(maxHealthRegex.Match(line).ToString().Replace("MaxHealth: ", ""));
 
@@ -396,7 +407,6 @@ namespace WoWDeveloperAssistant.Misc
                 if (xyzLine.Contains("TransportPosition"))
                     return spawnPosition;
 
-                Regex xyzRegex = new Regex(@"Position:\s{1}X:{1}\s{1}");
                 if (xyzRegex.IsMatch(xyzLine))
                 {
                     string[] splittedLine = xyzLine.Split(' ');
@@ -406,7 +416,6 @@ namespace WoWDeveloperAssistant.Misc
                     spawnPosition.z = float.Parse(splittedLine[7], CultureInfo.InvariantCulture.NumberFormat);
                 }
 
-                Regex oriRegex = new Regex(@"Orientation:\s{1}");
                 if (oriRegex.IsMatch(oriLine))
                 {
                     string[] splittedLine = oriLine.Split(' ');
@@ -419,7 +428,6 @@ namespace WoWDeveloperAssistant.Misc
 
             public static uint? GetMapIdFromLine(string line)
             {
-                Regex mapRegex = new Regex(@"MapId:{1}\s{1}\d+");
                 if (mapRegex.IsMatch(line))
                     return Convert.ToUInt32(mapRegex.Match(line).ToString().Replace("MapId: ", ""));
 
@@ -463,7 +471,6 @@ namespace WoWDeveloperAssistant.Misc
 
             public static uint? GetEmoteStateFromLine(string line)
             {
-                Regex emoteRegex = new Regex(@"EmoteState:{1}\s{1}\w+");
                 if (emoteRegex.IsMatch(line))
                     return Convert.ToUInt32(emoteRegex.Match(line).ToString().Replace("EmoteState: ", ""));
 
@@ -472,7 +479,6 @@ namespace WoWDeveloperAssistant.Misc
 
             public static uint? GetSheatheStateFromLine(string line)
             {
-                Regex sheatheStateRegex = new Regex(@"SheatheState:{1}\s{1}\w+");
                 if (sheatheStateRegex.IsMatch(line))
                     return Convert.ToUInt32(sheatheStateRegex.Match(line).ToString().Replace("SheatheState: ", ""));
 
@@ -481,7 +487,6 @@ namespace WoWDeveloperAssistant.Misc
 
             public static uint? GetStandStateFromLine(string line)
             {
-                Regex standstateRegex = new Regex(@"StandState:{1}\s{1}\w+");
                 if (standstateRegex.IsMatch(line))
                     return Convert.ToUInt32(standstateRegex.Match(line).ToString().Replace("StandState: ", ""));
 
@@ -490,7 +495,6 @@ namespace WoWDeveloperAssistant.Misc
 
             public static uint GetDurationFromLine(string line)
             {
-                Regex durationRegex = new Regex(@"] Duration:{1}\s{1}\w+");
                 if (durationRegex.IsMatch(line))
                     return Convert.ToUInt32(durationRegex.Match(line).ToString().Replace("] Duration: ", ""));
 
@@ -499,16 +503,14 @@ namespace WoWDeveloperAssistant.Misc
 
             public static uint GetUnitFlagsFromLine(string line)
             {
-                Regex durationRegex = new Regex(@"\(UnitData\) Flags:{1}\s{1}\w+");
-                if (durationRegex.IsMatch(line))
-                    return Convert.ToUInt32(durationRegex.Match(line).ToString().Replace("(UnitData) Flags: ", ""));
+                if (flagsRegex.IsMatch(line))
+                    return Convert.ToUInt32(flagsRegex.Match(line).ToString().Replace("(UnitData) Flags: ", ""));
 
                 return 0;
             }
 
             public static float GetJumpGravityFromLine(string line)
             {
-                Regex jumpGravityRegex = new Regex(@"JumpGravity:{1}\s+.+");
                 if (jumpGravityRegex.IsMatch(line))
                     return float.Parse((jumpGravityRegex.Match(line).ToString().Replace("JumpGravity: ", "")), CultureInfo.InvariantCulture.NumberFormat);
 
@@ -720,9 +722,15 @@ namespace WoWDeveloperAssistant.Misc
             public MonsterMovePacket(string guid, float orientation, TimeSpan time, List<Waypoint> waypoints, uint moveTime, Position pos, JumpInfo jump)
             { creatureGuid = guid; creatureOrientation = orientation; packetSendTime = time; this.waypoints = waypoints; this.moveTime = moveTime; startPos = pos; jumpInfo = jump; }
 
+            public static readonly Regex facingRegex = new Regex(@"FaceDirection:{1}\s+\d+\.+\d+");
+            public static readonly Regex xyzRegex = new Regex(@"Points:{1}\s{1}X:{1}.+");
+            public static readonly Regex waypointXyzRegex = new Regex(@"WayPoints:{1}\s{1}X:{1}.+");
+            public static readonly Regex moveTimeRegex = new Regex(@"MoveTime:{1}\s+\d+");
+            public static readonly Regex posXyzRegex = new Regex(@"Position:{1}\s{1}X:{1}.+");
+            public static readonly Regex jumpGravityRegex = new Regex(@"JumpGravity:{1}\s+.+");
+
             public static float GetFaceDirectionFromLine(string line)
             {
-                Regex facingRegex = new Regex(@"FaceDirection:{1}\s+\d+\.+\d+");
                 if (facingRegex.IsMatch(line))
                     return float.Parse(facingRegex.Match(line).ToString().Replace("FaceDirection: ", ""), CultureInfo.InvariantCulture.NumberFormat);
 
@@ -741,7 +749,6 @@ namespace WoWDeveloperAssistant.Misc
             {
                 Position pointPosition = new Position();
 
-                Regex xyzRegex = new Regex(@"Points:{1}\s{1}X:{1}.+");
                 if (xyzRegex.IsMatch(line))
                 {
                     string[] splittedLine = xyzRegex.Match(line).ToString().Replace("Points: X: ", "").Split(' ');
@@ -758,10 +765,9 @@ namespace WoWDeveloperAssistant.Misc
             {
                 Position wayPointPosition = new Position();
 
-                Regex xyzRegex = new Regex(@"WayPoints:{1}\s{1}X:{1}.+");
-                if (xyzRegex.IsMatch(line))
+                if (waypointXyzRegex.IsMatch(line))
                 {
-                    string[] splittedLine = xyzRegex.Match(line).ToString().Replace("WayPoints: X: ", "").Split(' ');
+                    string[] splittedLine = waypointXyzRegex.Match(line).ToString().Replace("WayPoints: X: ", "").Split(' ');
 
                     wayPointPosition.x = float.Parse(splittedLine[0], CultureInfo.InvariantCulture.NumberFormat);
                     wayPointPosition.y = float.Parse(splittedLine[2], CultureInfo.InvariantCulture.NumberFormat);
@@ -773,7 +779,6 @@ namespace WoWDeveloperAssistant.Misc
 
             public static uint GetMoveTimeFromLine(string line)
             {
-                Regex moveTimeRegex = new Regex(@"MoveTime:{1}\s+\d+");
                 if (moveTimeRegex.IsMatch(line))
                     return Convert.ToUInt32(moveTimeRegex.Match(line).ToString().Replace("MoveTime: ", ""));
 
@@ -784,10 +789,9 @@ namespace WoWDeveloperAssistant.Misc
             {
                 Position startPosition = new Position();
 
-                Regex xyzRegex = new Regex(@"Position:{1}\s{1}X:{1}.+");
-                if (xyzRegex.IsMatch(line))
+                if (posXyzRegex.IsMatch(line))
                 {
-                    string[] splittedLine = xyzRegex.Match(line).ToString().Replace("Position: X: ", "").Split(' ');
+                    string[] splittedLine = posXyzRegex.Match(line).ToString().Replace("Position: X: ", "").Split(' ');
 
                     startPosition.x = float.Parse(splittedLine[0], CultureInfo.InvariantCulture.NumberFormat);
                     startPosition.y = float.Parse(splittedLine[2], CultureInfo.InvariantCulture.NumberFormat);
@@ -799,7 +803,6 @@ namespace WoWDeveloperAssistant.Misc
 
             public static float GetJumpGravityFromLine(string line)
             {
-                Regex jumpGravityRegex = new Regex(@"JumpGravity:{1}\s+.+");
                 if (jumpGravityRegex.IsMatch(line))
                     return float.Parse((jumpGravityRegex.Match(line).ToString().Replace("JumpGravity: ", "")), CultureInfo.InvariantCulture.NumberFormat);
 
@@ -1147,9 +1150,10 @@ namespace WoWDeveloperAssistant.Misc
             public AttackStopPacket(string guid, bool dead, TimeSpan time)
             { creatureGuid = guid; nowDead = dead; packetSendTime = time; }
 
+            public static readonly Regex nowDeadRegex = new Regex(@"NowDead:{1}\s+\w+");
+
             public static bool GetNowDeadFromLine(string line)
             {
-                Regex nowDeadRegex = new Regex(@"NowDead:{1}\s+\w+");
                 if (nowDeadRegex.IsMatch(line))
                     return nowDeadRegex.Match(line).ToString().Replace("NowDead: ", "") == "True";
 
@@ -1230,9 +1234,11 @@ namespace WoWDeveloperAssistant.Misc
             public AuraUpdatePacket(string guid, uint? slot, uint spellId, bool? hasAUra, TimeSpan time)
             { unitGuid = guid; this.slot = slot; this.spellId = spellId; this.HasAura = hasAUra; packetSendTime = time; }
 
+            public static readonly Regex slotRegex = new Regex(@"Slot:{1}\s{1}\d+");
+            public static readonly Regex applyRegex = new Regex(@"HasAura:{1}\s{1}\w+");
+
             public static uint? GetAuraSlotFromLine(string line)
             {
-                Regex slotRegex = new Regex(@"Slot:{1}\s{1}\d+");
                 if (slotRegex.IsMatch(line))
                     return Convert.ToUInt32(slotRegex.Match(line).ToString().Replace("Slot: ", ""));
 
@@ -1241,7 +1247,6 @@ namespace WoWDeveloperAssistant.Misc
 
             public static bool? GetHasAuraFromLine(string line)
             {
-                Regex applyRegex = new Regex(@"HasAura:{1}\s{1}\w+");
                 if (applyRegex.IsMatch(line))
                     return applyRegex.Match(line).ToString().Replace("HasAura: ", "") == "True";
 
@@ -1336,9 +1341,11 @@ namespace WoWDeveloperAssistant.Misc
             public EmotePacket(string guid, uint emote, TimeSpan time)
             { this.guid = guid; emoteId = emote; packetSendTime = time; }
 
+            public static readonly Regex guidRegex = new Regex(@"GUID: TypeName: Creature; Full:{1}\s*\w{20,}");
+            public static readonly Regex emoteRegex = new Regex(@"EmoteID:{1}\s{1}\d+");
+
             public static string GetGuidFromLine(string line)
             {
-                Regex guidRegex = new Regex(@"GUID: TypeName: Creature; Full:{1}\s*\w{20,}");
                 if (guidRegex.IsMatch(line))
                     return guidRegex.Match(line).ToString().Replace("GUID: TypeName: Creature; Full: ", "");
 
@@ -1347,7 +1354,6 @@ namespace WoWDeveloperAssistant.Misc
 
             public static uint GetEmoteIdFromLine(string line)
             {
-                Regex emoteRegex = new Regex(@"EmoteID:{1}\s{1}\d+");
                 if (emoteRegex.IsMatch(line))
                     return Convert.ToUInt32(emoteRegex.Match(line).ToString().Replace("EmoteID: ", ""));
 
@@ -1384,9 +1390,11 @@ namespace WoWDeveloperAssistant.Misc
             public SetAiAnimKitPacket(string guid, uint animKitId, TimeSpan time)
             { this.guid = guid; aiAnimKitId = animKitId; packetSendTime = time; }
 
+            public static readonly Regex guidRegex = new Regex(@"Unit: TypeName: Creature; Full:{1}\s*\w{20,}");
+            public static readonly Regex emoteRegex = new Regex(@"AiAnimKitId:{1}\s{1}\d+");
+
             public static string GetGuidFromLine(string line)
             {
-                Regex guidRegex = new Regex(@"Unit: TypeName: Creature; Full:{1}\s*\w{20,}");
                 if (guidRegex.IsMatch(line))
                     return guidRegex.Match(line).ToString().Replace("Unit: TypeName: Creature; Full: ", "");
 
@@ -1395,7 +1403,6 @@ namespace WoWDeveloperAssistant.Misc
 
             public static uint? GetAiAnimKitIdFromLine(string line)
             {
-                Regex emoteRegex = new Regex(@"AiAnimKitId:{1}\s{1}\d+");
                 if (emoteRegex.IsMatch(line))
                     return Convert.ToUInt32(emoteRegex.Match(line).ToString().Replace("AiAnimKitId: ", ""));
 

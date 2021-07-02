@@ -16,6 +16,8 @@ namespace WoWDeveloperAssistant.Creature_Scripts_Creator
 {
     public class CreatureScriptsCreator
     {
+        public static readonly Regex nonWordRegex = new Regex(@"\W+");
+
         private readonly MainForm mainForm;
         public static Dictionary<string, Creature> creaturesDict = new Dictionary<string, Creature>();
         public static Dictionary<uint, List<CreatureText>> creatureTextsDict = new Dictionary<uint, List<CreatureText>>();
@@ -617,7 +619,6 @@ namespace WoWDeveloperAssistant.Creature_Scripts_Creator
 
         private static string NormilizeName(string line)
         {
-            Regex nonWordRegex = new Regex(@"\W+");
             string normilizedString = line;
 
             normilizedString = normilizedString.Replace(" ", "");

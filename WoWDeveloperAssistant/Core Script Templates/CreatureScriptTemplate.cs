@@ -9,6 +9,8 @@ namespace WoWDeveloperAssistant.Core_Script_Templates
 {
     public static class CreatureScriptTemplate
     {
+        public static readonly Regex nonWordRegex = new Regex(@"\W+");
+
         public static Dictionary<string, string> hooksDictionary = new Dictionary<string, string>
         {
             { "IsSummonedBy",      "void IsSummonedBy(Unit* p_Summoner) override"                                                            },
@@ -182,7 +184,6 @@ namespace WoWDeveloperAssistant.Core_Script_Templates
 
         public static string NormilizeScriptName(string line)
         {
-            Regex nonWordRegex = new Regex(@"\W+");
             string normilizedString = line;
 
             normilizedString = normilizedString.Replace(" ", "_");

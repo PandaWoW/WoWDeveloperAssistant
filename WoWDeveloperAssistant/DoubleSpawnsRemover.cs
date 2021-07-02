@@ -13,6 +13,10 @@ namespace WoWDeveloperAssistant
 {
     public static class DoubleSpawnsRemover
     {
+        public static readonly Regex creatureLineRegex = new Regex(@".+,{1}\s{1}'0'{1},{1}\s{1}0,{1}\s{1}0,{1}\s{1}");
+        public static readonly Regex gameobjectLineRegex = new Regex(@".+,{1}\s{1}'0'{1},{1}\s{1}");
+        public static readonly Regex linkedIdRegex = new Regex(@"'+\S+'+");
+
         private enum ObjectTypes
         {
             Unknown    = 0,
@@ -472,9 +476,6 @@ namespace WoWDeveloperAssistant
 
         private static Position GetPositionFromLine(string line)
         {
-            Regex creatureLineRegex = new Regex(@".+,{1}\s{1}'0'{1},{1}\s{1}0,{1}\s{1}0,{1}\s{1}");
-            Regex gameobjectLineRegex = new Regex(@".+,{1}\s{1}'0'{1},{1}\s{1}");
-
             if (creatureLineRegex.IsMatch(line))
             {
                 string[] splittedLine = line.Replace(creatureLineRegex.Match(line).ToString(), "").Split(',');
@@ -504,8 +505,6 @@ namespace WoWDeveloperAssistant
 
         private static string GetLinkedIdFromLine(string line)
         {
-            Regex linkedIdRegex = new Regex(@"'+\S+'+");
-
             if (linkedIdRegex.IsMatch(line))
             {
                 {

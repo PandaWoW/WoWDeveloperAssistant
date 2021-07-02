@@ -372,11 +372,10 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
                                 {
                                     if (scriptsParsingStarted && packet.parsedPacketsList.Count != 0)
                                     {
-                                        if (packet.parsedPacketsList.GetUpdatePacketForCreatureWithGuid(creature.guid) != null)
+                                        UpdateObjectPacket? updatePacket = packet.parsedPacketsList.GetUpdatePacketForCreatureWithGuid(creature.guid);
+                                        if (updatePacket != null)
                                         {
-                                            UpdateObjectPacket updatePacket = (UpdateObjectPacket)packet.parsedPacketsList.GetUpdatePacketForCreatureWithGuid(creature.guid);
-
-                                            List<WaypointScript> updateScriptsList = WaypointScript.GetScriptsFromUpdatePacket(updatePacket);
+                                            List<WaypointScript> updateScriptsList = WaypointScript.GetScriptsFromUpdatePacket(updatePacket.Value);
                                             if (updateScriptsList.Count != 0)
                                             {
                                                 scriptsList.AddRange(updateScriptsList);

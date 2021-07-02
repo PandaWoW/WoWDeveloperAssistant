@@ -149,6 +149,7 @@ namespace WoWDeveloperAssistant.Misc
             foreach (var packet in dict.Values.Where(packet => packet.packetType == Packet.PacketTypes.SMSG_EMOTE && packet.index == index))
             {
                 packet.parsedPacketsList.Add(emotePacket);
+                packet.UsedGuids.Add(emotePacket.guid);
                 return;
             }
         }
@@ -158,6 +159,7 @@ namespace WoWDeveloperAssistant.Misc
             foreach (var packet in dict.Values.Where(packet => packet.packetType == Packet.PacketTypes.SMSG_AURA_UPDATE && packet.index == index))
             {
                 packet.parsedPacketsList.Add(auraPacket);
+                packet.UsedGuids.Add(auraPacket.unitGuid);
                 return;
             }
         }
@@ -167,6 +169,7 @@ namespace WoWDeveloperAssistant.Misc
             foreach (var packet in dict.Values.Where(packet => packet.packetType == Packet.PacketTypes.SMSG_SPELL_START && packet.index == index))
             {
                 packet.parsedPacketsList.Add(spellPacket);
+                packet.UsedGuids.Add(spellPacket.casterGuid);
                 return;
             }
         }
@@ -176,6 +179,7 @@ namespace WoWDeveloperAssistant.Misc
             foreach (var packet in dict.Values.Where(packet => packet.packetType == Packet.PacketTypes.SMSG_ON_MONSTER_MOVE && packet.index == index))
             {
                 packet.parsedPacketsList.Add(movementPacket);
+                packet.UsedGuids.Add(movementPacket.creatureGuid);
                 return;
             }
         }
@@ -185,6 +189,7 @@ namespace WoWDeveloperAssistant.Misc
             foreach (var packet in dict.Values.Where(packet => packet.packetType == Packet.PacketTypes.SMSG_UPDATE_OBJECT && packet.index == index))
             {
                 packet.parsedPacketsList.Add(updatePacket);
+                packet.UsedGuids.Add(updatePacket.creatureGuid);
                 return;
             }
         }
@@ -194,6 +199,7 @@ namespace WoWDeveloperAssistant.Misc
             foreach (var packet in dict.Values.Where(packet => packet.packetType == Packet.PacketTypes.SMSG_ATTACK_STOP && packet.index == index))
             {
                 packet.parsedPacketsList.Add(attackStopPacket);
+                packet.UsedGuids.Add(attackStopPacket.creatureGuid);
                 return;
             }
         }
@@ -203,6 +209,7 @@ namespace WoWDeveloperAssistant.Misc
             foreach (var packet in dict.Values.Where(packet => packet.packetType == Packet.PacketTypes.SMSG_SET_AI_ANIM_KIT && packet.index == index))
             {
                 packet.parsedPacketsList.Add(animKitPacket);
+                packet.UsedGuids.Add(animKitPacket.guid);
                 return;
             }
         }

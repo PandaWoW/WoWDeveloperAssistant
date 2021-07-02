@@ -18,15 +18,15 @@ namespace WoWDeveloperAssistant.Misc
             public PacketTypes packetType;
             public TimeSpan sendTime;
             public long index;
-            public List<object> parsedPacketsList;
+            public List<object> parsedPacketsList = new List<object>();
+            public HashSet<string> UsedGuids = new HashSet<string>();
 
             public Packet(PacketTypes type, TimeSpan time, long index)
             {
                 packetType = type;
                 sendTime = time;
                 this.index = index;
-                parsedPacketsList = new List<object>();
-            }
+             }
 
             public enum PacketTypes : byte
             {
@@ -67,77 +67,7 @@ namespace WoWDeveloperAssistant.Misc
 
             public bool HasCreatureWithGuid(string guid)
             {
-                if (parsedPacketsList.Count == 0)
-                    return false;
-
-                switch (packetType)
-                {
-                    case PacketTypes.SMSG_UPDATE_OBJECT:
-                    {
-                        if (parsedPacketsList.Cast<UpdateObjectPacket>().Any(updatePacket => updatePacket.creatureGuid == guid))
-                        {
-                            return true;
-                        }
-
-                        break;
-                    }
-                    case PacketTypes.SMSG_ON_MONSTER_MOVE:
-                    {
-                        if (parsedPacketsList.Cast<MonsterMovePacket>().Any(movementPacket => movementPacket.creatureGuid == guid))
-                        {
-                            return true;
-                        }
-
-                        break;
-                    }
-                    case PacketTypes.SMSG_SPELL_START:
-                    {
-                        if (parsedPacketsList.Cast<SpellStartPacket>().Any(spellPacket => spellPacket.casterGuid == guid))
-                        {
-                            return true;
-                        }
-
-                        break;
-                    }
-                    case PacketTypes.SMSG_AURA_UPDATE:
-                    {
-                        if (parsedPacketsList.Cast<AuraUpdatePacket>().Any(auraPacket => auraPacket.unitGuid == guid))
-                        {
-                            return true;
-                        }
-
-                        break;
-                    }
-                    case PacketTypes.SMSG_EMOTE:
-                    {
-                        if (parsedPacketsList.Cast<EmotePacket>().Any(emotePacket => emotePacket.guid == guid))
-                        {
-                            return true;
-                        }
-
-                        break;
-                    }
-                    case PacketTypes.SMSG_ATTACK_STOP:
-                    {
-                        if (parsedPacketsList.Cast<AttackStopPacket>().Any(attackStopPacket => attackStopPacket.creatureGuid == guid))
-                        {
-                            return true;
-                        }
-
-                        break;
-                    }
-                    case PacketTypes.SMSG_SET_AI_ANIM_KIT:
-                    {
-                        if (parsedPacketsList.Cast<SetAiAnimKitPacket>().Any(animKitPacket => animKitPacket.guid == guid))
-                        {
-                            return true;
-                        }
-
-                        break;
-                    }
-                }
-
-                return false;
+                return UsedGuids.Contains(guid);
             }
 
             public bool IsScriptPacket()
@@ -993,16 +923,16 @@ namespace WoWDeveloperAssistant.Misc
                     {
                         string guid = LineGetters.GetGuidFromLine(lines[index + 1], buildVersion, moverGuid: true);
 
-                        List<Packet> updateObjectPackets = updateObjectPacketsDict.Values.Where(x => x.HasCreatureWithGuid(guid)).OrderBy(x => (uint)x.sendTime.TotalSeconds).ToList();
+                        IEnumerable<Packet> updateObjectPacketsReversed = updateObjectPacketsDict.Values.Where(x => x.HasCreatureWithGuid(guid)).OrderBy(x => (uint)x.sendTime.TotalSeconds).Reverse();
 
                         foreach (Packet packet in updateObjectPacketsDict.Values.Where(x => x.HasCreatureWithGuid(guid)).OrderBy(x => (uint)x.sendTime.TotalSeconds))
                         {
                             UpdateObjectPacket updatePacketFirst = (UpdateObjectPacket)packet.parsedPacketsList.First(x => ((UpdateObjectPacket)x).creatureGuid == guid);
                             if ((updatePacketFirst.unitFlags & UnitFlags.UNIT_FLAG_IN_COMBAT) != 0)
                             {
-                                for (int i = updateObjectPackets.Count() - 1; i >= 0; i--)
+                                foreach (Packet packetReversed in updateObjectPacketsReversed)
                                 {
-                                    UpdateObjectPacket updatePacketSecond = (UpdateObjectPacket)updateObjectPackets[i].parsedPacketsList.First(x => ((UpdateObjectPacket)x).creatureGuid == guid);
+                                    UpdateObjectPacket updatePacketSecond = (UpdateObjectPacket)packetReversed.parsedPacketsList.First(x => ((UpdateObjectPacket)x).creatureGuid == guid);
                                     if ((uint)updatePacketSecond.packetSendTime.TotalSeconds < (uint)movePacket.packetSendTime.TotalSeconds)
                                     {
                                         if ((updatePacketSecond.unitFlags & UnitFlags.UNIT_FLAG_IN_COMBAT) != 0)

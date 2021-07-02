@@ -20,7 +20,10 @@ namespace WoWDeveloperAssistant.Misc
             BUILD_8_2_5   = 5,
             BUILD_8_3_0   = 6,
             BUILD_8_3_7   = 7,
-            BUILD_9_0_1   = 8
+            BUILD_9_0_1   = 8,
+            BUILD_9_0_2   = 9,
+            BUILD_9_0_5   = 10,
+            BUILD_9_1_0   = 11
         };
 
         public static string GetValueWithoutComma(this float value)
@@ -186,6 +189,24 @@ namespace WoWDeveloperAssistant.Misc
             }
         }
 
+        public static void AddSourceFromAttackStopPacket(this SortedDictionary<long, Packet> dict, AttackStopPacket attackStopPacket, long index)
+        {
+            foreach (var packet in dict.Values.Where(packet => packet.packetType == Packet.PacketTypes.SMSG_ATTACK_STOP && packet.index == index))
+            {
+                packet.parsedPacketsList.Add(attackStopPacket);
+                return;
+            }
+        }
+
+        public static void AddSourceFromSetAiAnimKitPacket(this SortedDictionary<long, Packet> dict, SetAiAnimKitPacket animKitPacket, long index)
+        {
+            foreach (var packet in dict.Values.Where(packet => packet.packetType == Packet.PacketTypes.SMSG_SET_AI_ANIM_KIT && packet.index == index))
+            {
+                packet.parsedPacketsList.Add(animKitPacket);
+                return;
+            }
+        }
+
         public static bool ContainPacketWithIndex(this IEnumerable<Packet> list, long index)
         {
             return list.Any(packet => packet.index == index);
@@ -204,6 +225,11 @@ namespace WoWDeveloperAssistant.Misc
         public static string ToFormattedString(this TimeSpan span)
         {
             return $"{span.Hours:00}:{span.Minutes:00}:{span.Seconds:00}";
+        }
+
+        public static string ToFormattedStringWithMilliseconds(this TimeSpan span)
+        {
+            return $"{span.Hours:00}:{span.Minutes:00}:{span.Seconds:00}:{span.Milliseconds}";
         }
 
         public static TimeSpan GetMinTimeSpanFromList(IEnumerable<TimeSpan> timeSpanList)

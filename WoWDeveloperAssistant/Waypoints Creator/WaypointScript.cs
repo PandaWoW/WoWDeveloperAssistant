@@ -5,6 +5,7 @@ using static WoWDeveloperAssistant.Misc.Packets;
 
 namespace WoWDeveloperAssistant.Waypoints_Creator
 {
+    [Serializable]
     public class WaypointScript : ICloneable
     {
         public enum ScriptType : byte
@@ -51,6 +52,9 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
             if (updatePacket.standState != null)
                 waypointScripts.Add(new WaypointScript(0, 0, ScriptType.SetField, 76, (uint)updatePacket.standState, 0, 0.0f, 0.0f, 0.0f, 0.0f, 0, updatePacket.packetSendTime));
 
+            if (updatePacket.jumpInfo.IsValid())
+                waypointScripts.Add(new WaypointScript(0, 0, ScriptType.Jump, updatePacket.jumpInfo.moveTime, 0, 0, updatePacket.jumpInfo.jumpPos.x, updatePacket.jumpInfo.jumpPos.y, updatePacket.jumpInfo.jumpPos.z, updatePacket.jumpInfo.jumpGravity, 0, updatePacket.packetSendTime));
+
             return waypointScripts;
         }
 
@@ -77,6 +81,11 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
         public static WaypointScript GetScriptsFromEmotePacket(EmotePacket emotePacket)
         {
             return new WaypointScript(0, 0, ScriptType.Emote, emotePacket.emoteId, 0, 0, 0.0f, 0.0f, 0.0f, 0.0f, 0, emotePacket.packetSendTime);
+        }
+
+        public static WaypointScript GetScriptsFromSetAiAnimKitPacket(SetAiAnimKitPacket animKitPacket)
+        {
+            return new WaypointScript(0, 0, ScriptType.SetAnimKit, (uint)animKitPacket.aiAnimKitId, 0, 0, 0.0f, 0.0f, 0.0f, 0.0f, 0, animKitPacket.packetSendTime);
         }
 
         public object Clone()

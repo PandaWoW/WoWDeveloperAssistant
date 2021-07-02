@@ -29,69 +29,94 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
-            this.checkBox_WC_Vector = new System.Windows.Forms.CheckBox();
-            this.checkBox_WC_Scripts = new System.Windows.Forms.CheckBox();
-            this.button_WC_Ok = new System.Windows.Forms.Button();
-            this.button_WC_Cancel = new System.Windows.Forms.Button();
+            this.checkBox_CreateVector = new System.Windows.Forms.CheckBox();
+            this.checkBox_ParseWaypointScripts = new System.Windows.Forms.CheckBox();
+            this.checkBox_DoNotAddCritterGuids = new System.Windows.Forms.CheckBox();
+            this.checkBox_CheckExistedPathOnDb = new System.Windows.Forms.CheckBox();
+            this.checkBox_SkipCombatMovement = new System.Windows.Forms.CheckBox();
+            this.checkBox_CheckCreatureOnDb = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
-            // checkBox_WC_Vector
+            // checkBox_CreateVector
             // 
-            this.checkBox_WC_Vector.AutoSize = true;
-            this.checkBox_WC_Vector.Checked = true;
-            this.checkBox_WC_Vector.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_WC_Vector.Location = new System.Drawing.Point(12, 12);
-            this.checkBox_WC_Vector.Name = "checkBox_WC_Vector";
-            this.checkBox_WC_Vector.Size = new System.Drawing.Size(129, 24);
-            this.checkBox_WC_Vector.TabIndex = 0;
-            this.checkBox_WC_Vector.Text = "G3D Vector3";
-            this.checkBox_WC_Vector.UseVisualStyleBackColor = true;
+            this.checkBox_CreateVector.AutoSize = true;
+            this.checkBox_CreateVector.Checked = true;
+            this.checkBox_CreateVector.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_CreateVector.Location = new System.Drawing.Point(12, 12);
+            this.checkBox_CreateVector.Name = "checkBox_CreateVector";
+            this.checkBox_CreateVector.Size = new System.Drawing.Size(181, 24);
+            this.checkBox_CreateVector.TabIndex = 0;
+            this.checkBox_CreateVector.Text = "Create G3D Vector3";
+            this.checkBox_CreateVector.UseVisualStyleBackColor = true;
             // 
-            // checkBox_WC_Scripts
+            // checkBox_ParseWaypointScripts
             // 
-            this.checkBox_WC_Scripts.AutoSize = true;
-            this.checkBox_WC_Scripts.Checked = true;
-            this.checkBox_WC_Scripts.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_WC_Scripts.Location = new System.Drawing.Point(147, 12);
-            this.checkBox_WC_Scripts.Name = "checkBox_WC_Scripts";
-            this.checkBox_WC_Scripts.Size = new System.Drawing.Size(154, 24);
-            this.checkBox_WC_Scripts.TabIndex = 1;
-            this.checkBox_WC_Scripts.Text = "Waypoint Scripts";
-            this.checkBox_WC_Scripts.UseVisualStyleBackColor = true;
+            this.checkBox_ParseWaypointScripts.AutoSize = true;
+            this.checkBox_ParseWaypointScripts.Location = new System.Drawing.Point(13, 42);
+            this.checkBox_ParseWaypointScripts.Name = "checkBox_ParseWaypointScripts";
+            this.checkBox_ParseWaypointScripts.Size = new System.Drawing.Size(199, 24);
+            this.checkBox_ParseWaypointScripts.TabIndex = 1;
+            this.checkBox_ParseWaypointScripts.Text = "Parse Waypoint Scripts";
+            this.checkBox_ParseWaypointScripts.UseVisualStyleBackColor = true;
             // 
-            // button_WC_Ok
+            // checkBox_DoNotAddCritterGuids
             // 
-            this.button_WC_Ok.Location = new System.Drawing.Point(12, 60);
-            this.button_WC_Ok.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.button_WC_Ok.Name = "button_WC_Ok";
-            this.button_WC_Ok.Size = new System.Drawing.Size(123, 37);
-            this.button_WC_Ok.TabIndex = 22;
-            this.button_WC_Ok.Text = "OK";
-            this.button_WC_Ok.UseVisualStyleBackColor = true;
-            this.button_WC_Ok.Click += new System.EventHandler(this.button_WC_Ok_Click);
+            this.checkBox_DoNotAddCritterGuids.AutoSize = true;
+            this.checkBox_DoNotAddCritterGuids.Checked = true;
+            this.checkBox_DoNotAddCritterGuids.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_DoNotAddCritterGuids.Location = new System.Drawing.Point(13, 72);
+            this.checkBox_DoNotAddCritterGuids.Name = "checkBox_DoNotAddCritterGuids";
+            this.checkBox_DoNotAddCritterGuids.Size = new System.Drawing.Size(200, 24);
+            this.checkBox_DoNotAddCritterGuids.TabIndex = 24;
+            this.checkBox_DoNotAddCritterGuids.Text = "Do not add critter guids";
+            this.checkBox_DoNotAddCritterGuids.UseVisualStyleBackColor = true;
             // 
-            // button_WC_Cancel
+            // checkBox_CheckExistedPathOnDb
             // 
-            this.button_WC_Cancel.Location = new System.Drawing.Point(165, 60);
-            this.button_WC_Cancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.button_WC_Cancel.Name = "button_WC_Cancel";
-            this.button_WC_Cancel.Size = new System.Drawing.Size(123, 35);
-            this.button_WC_Cancel.TabIndex = 23;
-            this.button_WC_Cancel.Text = "Cancel";
-            this.button_WC_Cancel.UseVisualStyleBackColor = true;
-            this.button_WC_Cancel.Click += new System.EventHandler(this.button_WC_Cancel_Click);
+            this.checkBox_CheckExistedPathOnDb.AutoSize = true;
+            this.checkBox_CheckExistedPathOnDb.Checked = true;
+            this.checkBox_CheckExistedPathOnDb.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_CheckExistedPathOnDb.Location = new System.Drawing.Point(13, 102);
+            this.checkBox_CheckExistedPathOnDb.Name = "checkBox_CheckExistedPathOnDb";
+            this.checkBox_CheckExistedPathOnDb.Size = new System.Drawing.Size(333, 24);
+            this.checkBox_CheckExistedPathOnDb.TabIndex = 25;
+            this.checkBox_CheckExistedPathOnDb.Text = "Check if creature already have path on DB";
+            this.checkBox_CheckExistedPathOnDb.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_SkipCombatMovement
+            // 
+            this.checkBox_SkipCombatMovement.AutoSize = true;
+            this.checkBox_SkipCombatMovement.Checked = true;
+            this.checkBox_SkipCombatMovement.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_SkipCombatMovement.Location = new System.Drawing.Point(13, 132);
+            this.checkBox_SkipCombatMovement.Name = "checkBox_SkipCombatMovement";
+            this.checkBox_SkipCombatMovement.Size = new System.Drawing.Size(201, 24);
+            this.checkBox_SkipCombatMovement.TabIndex = 26;
+            this.checkBox_SkipCombatMovement.Text = "Skip combat movement";
+            this.checkBox_SkipCombatMovement.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_CheckCreatureOnDb
+            // 
+            this.checkBox_CheckCreatureOnDb.AutoSize = true;
+            this.checkBox_CheckCreatureOnDb.Location = new System.Drawing.Point(13, 162);
+            this.checkBox_CheckCreatureOnDb.Name = "checkBox_CheckCreatureOnDb";
+            this.checkBox_CheckCreatureOnDb.Size = new System.Drawing.Size(242, 24);
+            this.checkBox_CheckCreatureOnDb.TabIndex = 27;
+            this.checkBox_CheckCreatureOnDb.Text = "Check if creature exists in DB";
+            this.checkBox_CheckCreatureOnDb.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(304, 101);
-            this.ControlBox = false;
-            this.Controls.Add(this.button_WC_Cancel);
-            this.Controls.Add(this.button_WC_Ok);
-            this.Controls.Add(this.checkBox_WC_Scripts);
-            this.Controls.Add(this.checkBox_WC_Vector);
+            this.ClientSize = new System.Drawing.Size(346, 190);
+            this.Controls.Add(this.checkBox_CheckCreatureOnDb);
+            this.Controls.Add(this.checkBox_SkipCombatMovement);
+            this.Controls.Add(this.checkBox_CheckExistedPathOnDb);
+            this.Controls.Add(this.checkBox_DoNotAddCritterGuids);
+            this.Controls.Add(this.checkBox_ParseWaypointScripts);
+            this.Controls.Add(this.checkBox_CreateVector);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -100,6 +125,7 @@
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Settings";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SettingsForm_FormClosed);
             this.Load += new System.EventHandler(this.SettingsForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -108,9 +134,11 @@
 
         #endregion
 
-        private System.Windows.Forms.CheckBox checkBox_WC_Vector;
-        private System.Windows.Forms.CheckBox checkBox_WC_Scripts;
-        internal System.Windows.Forms.Button button_WC_Ok;
-        internal System.Windows.Forms.Button button_WC_Cancel;
+        private System.Windows.Forms.CheckBox checkBox_CreateVector;
+        private System.Windows.Forms.CheckBox checkBox_ParseWaypointScripts;
+        private System.Windows.Forms.CheckBox checkBox_DoNotAddCritterGuids;
+        private System.Windows.Forms.CheckBox checkBox_CheckExistedPathOnDb;
+        private System.Windows.Forms.CheckBox checkBox_SkipCombatMovement;
+        private System.Windows.Forms.CheckBox checkBox_CheckCreatureOnDb;
     }
 }

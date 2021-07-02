@@ -8,9 +8,9 @@ namespace WoWDeveloperAssistant.Misc
 {
     public static class LineGetters
     {
-        public static string GetGuidFromLine(string line, BuildVersions buidVersion, bool objectFieldGuid = false, bool unitGuid = false, bool senderGuid = false, bool moverGuid = false, bool attackerGuid = false, bool casterGuid = false, bool updateAuraGuid = false)
+        public static string GetGuidFromLine(string line, BuildVersions buidVersion, bool objectFieldGuid = false, bool unitGuid = false, bool senderGuid = false, bool moverGuid = false, bool attackerGuid = false, bool casterGuid = false)
         {
-            if (!line.Contains("TypeName: Creature; Full:") && !line.Contains("TypeName: Vehicle; Full:"))
+            if (!line.Contains("TypeName: Creature; Full:") && !line.Contains("TypeName: Vehicle; Full:") && !line.Contains("TypeName: Player; Full:"))
                 return "";
 
             Regex objectTypeRegex = new Regex(@"[a-zA-Z]+;{1}\s{1}Full:{1}\s");
@@ -147,6 +147,12 @@ namespace WoWDeveloperAssistant.Misc
                         return BuildVersions.BUILD_8_3_7;
                     else if (line.Contains("V9_0_1"))
                         return BuildVersions.BUILD_9_0_1;
+                    else if (line.Contains("V9_0_2"))
+                        return BuildVersions.BUILD_9_0_2;
+                    else if (line.Contains("V9_0_5"))
+                        return BuildVersions.BUILD_9_0_5;
+                    else if (line.Contains("V9_1_0"))
+                        return BuildVersions.BUILD_9_1_0;
 
                     return BuildVersions.BUILD_UNKNOWN;
                 }
@@ -162,6 +168,18 @@ namespace WoWDeveloperAssistant.Misc
             if (entryRegex.IsMatch(line))
             {
                 return entryRegex.Match(line).ToString().Replace("Entry: ", "");
+            }
+
+            return "";
+        }
+
+        public static string GetSpellIdFromLine(string line)
+        {
+            Regex entryRegex = new Regex(@"SpellID:{1}\s*\d+");
+
+            if (entryRegex.IsMatch(line))
+            {
+                return entryRegex.Match(line).ToString().Replace("SpellID: ", "");
             }
 
             return "";

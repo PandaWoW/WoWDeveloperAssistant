@@ -14,7 +14,7 @@ namespace WoWDeveloperAssistant.Core_Script_Templates
             { "IsSummonedBy",      "void IsSummonedBy(Unit* p_Summoner) override"                                                            },
             { "QuestAccept",       "void sQuestAccept(Player* p_Player, Quest const* p_Quest) override"                                      },
             { "QuestReward",       "void sQuestReward(Player* p_Player, Quest const* p_Quest, uint32 /*p_Option*/) override"                 },
-            { "GossipSelect",      "void sGossipSelect(Player* p_Player, uint32 /*p_Sender*/, uint32 p_Action) override"                     },
+            { "GossipSelect",      "void sGossipSelect(Player* p_Player, uint32 /*p_MenuId*/, uint32 p_GossipListId) override"               },
             { "GossipHello",       "void sGossipHello(Player* p_Player) override"                                                            },
             { "MoveInLineOfSight", "void MoveInLineOfSight(Unit* p_Who) override"                                                            },
             { "DoAction",          "void DoAction(int32 const p_Action) override"                                                            },
@@ -58,7 +58,7 @@ namespace WoWDeveloperAssistant.Core_Script_Templates
                 new Dictionary<string, string>
                 {
                     { "GloseGossipWindow",    "p_Player->PlayerTalkClass->SendCloseGossip();" },
-                    { "GossipOptionIdSwitch", "switch (p_Action)" + "\r\n" + Utils.AddSpacesCount(8) + "{" + "\r\n" + Utils.AddSpacesCount(12) + "case 0:" + "\r\n" + Utils.AddSpacesCount(12) + "{" + "\r\n" + Utils.AddSpacesCount(16) + "break;" + "\r\n" + Utils.AddSpacesCount(12) + "}" + "\r\n" + Utils.AddSpacesCount(12) + "default:" + "\r\n" + Utils.AddSpacesCount(16) + "break;" + "\r\n" + Utils.AddSpacesCount(8) + "}" }
+                    { "GossipOptionIdSwitch", "switch (p_GossipListId)" + "\r\n" + Utils.AddSpacesCount(8) + "{" + "\r\n" + Utils.AddSpacesCount(12) + "case 0:" + "\r\n" + Utils.AddSpacesCount(12) + "{" + "\r\n" + Utils.AddSpacesCount(16) + "break;" + "\r\n" + Utils.AddSpacesCount(12) + "}" + "\r\n" + Utils.AddSpacesCount(12) + "default:" + "\r\n" + Utils.AddSpacesCount(16) + "break;" + "\r\n" + Utils.AddSpacesCount(8) + "}" }
                 }
             },
 
@@ -138,21 +138,22 @@ namespace WoWDeveloperAssistant.Core_Script_Templates
                 new Dictionary<string, string>
                 {
                     { "UpdateOperations",     "UpdateOperations(p_Diff);" },
-                    { "CheckPlayerOrDespawn", "CheckPlayerOrDespawn(p_Diff, eQuests::QuestId)" },
-                    { "DefaultPlayerCheck",   "if (me->isSummon())" + "\r\n" + Utils.AddSpacesCount(8) + "{" + "\r\n" + Utils.AddSpacesCount(12) + "if (UpdateCheckTimer(p_Diff))" + "\r\n" +  Utils.AddSpacesCount(12) + "{" + "\r\n" + Utils.AddSpacesCount(16) + "Player* l_Player = me->GetAnyPlayerOwner();" + "\r\n" + Utils.AddSpacesCount(16) + "if (!l_Player || !l_Player->IsInWorld() || !l_Player->HasQuest(eQuests::QuestId))" + "\r\n" + Utils.AddSpacesCount(16) + "{" + "\r\n" + Utils.AddSpacesCount(20) + "me->DespawnOrUnsummon();" + "\r\n" + Utils.AddSpacesCount(16) + "}" + "\r\n" + Utils.AddSpacesCount(12) + "}" + "\r\n" + Utils.AddSpacesCount(8) + "}" },
+                    { "CheckPlayerOrDespawn", "CheckPlayerOrDespawn(p_Diff, eQuests::QuestId);" },
+                    { "DefaultPlayerCheck",   "if (me->isSummon() && UpdateCheckTimer(p_Diff))" + "\r\n" +  Utils.AddSpacesCount(12) + "{" + "\r\n" + Utils.AddSpacesCount(16) + "Player* l_Player = me->GetAnyPlayerOwner();" + "\r\n" + Utils.AddSpacesCount(16) + "if (!l_Player || !l_Player->IsInWorld() || !l_Player->HasQuest(eQuests::QuestId))" + "\r\n" + Utils.AddSpacesCount(16) + "{" + "\r\n" + Utils.AddSpacesCount(20) + "me->DespawnOrUnsummon();" + "\r\n" + Utils.AddSpacesCount(16) + "}" + "\r\n" + Utils.AddSpacesCount(12) + "}" },
                     { "CombatChecks",         "if (!UpdateVictim())" + "\r\n" + Utils.AddSpacesCount(12) + "return;" + "\r\n\r\n" + Utils.AddSpacesCount(8) + "events.Update(p_Diff);" + "\r\n\r\n" + Utils.AddSpacesCount(8) + "if (me->HasUnitState(UNIT_STATE_CASTING))" + "\r\n" + Utils.AddSpacesCount(12) + "return;" },
                     { "EventsSwitch",         "switch (events.ExecuteEvent())" + "\r\n" + Utils.AddSpacesCount(8) + "{" + "\r\n" + Utils.AddSpacesCount(12) + "case eEvents::EventName:" + "\r\n" + Utils.AddSpacesCount(12) + "{" + "\r\n" + Utils.AddSpacesCount(16) + "events.ScheduleEvent(eEvents::Eventname, 10000);" + "\r\n" + Utils.AddSpacesCount(16) + "break;" + "\r\n" + Utils.AddSpacesCount(12) + "}" + "\r\n" + Utils.AddSpacesCount(12) + "default:" + "\r\n" + Utils.AddSpacesCount(16) + "break;" + "\r\n" + Utils.AddSpacesCount(8) + "}" },
                     { "DoMeleeAttack",        "DoMeleeAttackIfReady();" }
                 }
             },
         };
+
         public static void CreateTemplate(uint objectEntry, ListBox hooksListBox, TreeView hookBodiesTreeView)
         {
             string scriptBody = "";
             string defaultName = "";
             string scriptName = "";
 
-            string creatureNameQuery = "SELECT `name` FROM `creature_template` WHERE `entry` = " + objectEntry + ";";
+            string creatureNameQuery = "SELECT `Name1` FROM `creature_template_wdb` WHERE `entry` = " + objectEntry + ";";
             var creatureNameDs = Properties.Settings.Default.UsingDB ? SQLModule.DatabaseSelectQuery(creatureNameQuery) : null;
 
             if (creatureNameDs != null)
@@ -179,7 +180,7 @@ namespace WoWDeveloperAssistant.Core_Script_Templates
             MessageBox.Show("Template has been successfully builded and copied on your clipboard!");
         }
 
-        private static string NormilizeScriptName(string line)
+        public static string NormilizeScriptName(string line)
         {
             Regex nonWordRegex = new Regex(@"\W+");
             string normilizedString = line;

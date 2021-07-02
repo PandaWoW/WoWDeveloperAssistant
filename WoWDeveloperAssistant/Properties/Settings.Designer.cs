@@ -12,7 +12,7 @@ namespace WoWDeveloperAssistant.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.8.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.8.1.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -61,13 +61,13 @@ namespace WoWDeveloperAssistant.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("dev_735_world")]
-        public string Database {
+        [global::System.Configuration.DefaultSettingValueAttribute("world_shadowlands")]
+        public string WorldDatabase {
             get {
-                return ((string)(this["Database"]));
+                return ((string)(this["WorldDatabase"]));
             }
             set {
-                this["Database"] = value;
+                this["WorldDatabase"] = value;
             }
         }
         
@@ -109,13 +109,73 @@ namespace WoWDeveloperAssistant.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool Scripts {
             get {
                 return ((bool)(this["Scripts"]));
             }
             set {
                 this["Scripts"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Critters {
+            get {
+                return ((bool)(this["Critters"]));
+            }
+            set {
+                this["Critters"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CheckPathOnDb {
+            get {
+                return ((bool)(this["CheckPathOnDb"]));
+            }
+            set {
+                this["CheckPathOnDb"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CombatMovement {
+            get {
+                return ((bool)(this["CombatMovement"]));
+            }
+            set {
+                this["CombatMovement"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CheckCreatureOnDB {
+            get {
+                return ((bool)(this["CheckCreatureOnDB"]));
+            }
+            set {
+                this["CheckCreatureOnDB"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("hotfix_shadowlands")]
+        public string HotfixDatabase {
+            get {
+                return ((string)(this["HotfixDatabase"]));
+            }
+            set {
+                this["HotfixDatabase"] = value;
             }
         }
     }

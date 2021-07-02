@@ -174,24 +174,16 @@ namespace WoWDeveloperAssistant.Misc
             }
         }
 
-        public static void AddSourceFromMovementPacket(this SortedDictionary<long, Packet> dict, MonsterMovePacket movementPacket, long index)
+        public static void AddSourceFromMovementPacket(this Packet packet, MonsterMovePacket movementPacket)
         {
-            foreach (var packet in dict.Values.Where(packet => packet.packetType == Packet.PacketTypes.SMSG_ON_MONSTER_MOVE && packet.index == index))
-            {
-                packet.parsedPacketsList.Add(movementPacket);
-                packet.UsedGuids.Add(movementPacket.creatureGuid);
-                return;
-            }
+            packet.parsedPacketsList.Add(movementPacket);
+            packet.UsedGuids.Add(movementPacket.creatureGuid);
         }
 
-        public static void AddSourceFromUpdatePacket(this SortedDictionary<long, Packet> dict, UpdateObjectPacket updatePacket, long index)
+        public static void AddSourceFromUpdatePacket(this Packet packet, UpdateObjectPacket updatePacket)
         {
-            foreach (var packet in dict.Values.Where(packet => packet.packetType == Packet.PacketTypes.SMSG_UPDATE_OBJECT && packet.index == index))
-            {
-                packet.parsedPacketsList.Add(updatePacket);
-                packet.UsedGuids.Add(updatePacket.creatureGuid);
-                return;
-            }
+            packet.parsedPacketsList.Add(updatePacket);
+            packet.UsedGuids.Add(updatePacket.creatureGuid);
         }
 
         public static void AddSourceFromAttackStopPacket(this SortedDictionary<long, Packet> dict, AttackStopPacket attackStopPacket, long index)

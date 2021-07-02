@@ -149,9 +149,7 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
                 Parallel.ForEach(UpdateObjectPacket.ParseObjectUpdatePacket(lines, packet.index, buildVersion).AsEnumerable(), updatePacket =>
                 {
                     lock (updateObjectPacketsDict)
-                    {
-                        updateObjectPacketsDict.AddSourceFromUpdatePacket(updatePacket, packet.index);
-                    }
+                        packet.AddSourceFromUpdatePacket(updatePacket);
 
                     lock (creaturesDict)
                     {
@@ -178,7 +176,7 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
                 {
                     lock (movementPacketsDict)
                     {
-                        movementPacketsDict.AddSourceFromMovementPacket(movePacket, packet.index);
+                        packet.AddSourceFromMovementPacket(movePacket);
                     }
 
                     lock (creaturesDict)

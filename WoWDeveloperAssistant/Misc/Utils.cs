@@ -122,9 +122,10 @@ namespace WoWDeveloperAssistant.Misc
             return waypoint;
         }
 
-        public static UpdateObjectPacket? GetUpdatePacketForCreatureWithGuid(this IEnumerable<object> list, string guid)
+        public static UpdateObjectPacket? GetUpdatePacketForCreatureWithGuid(this IEnumerable<UpdateObjectPacket> list, string guid)
         {
-            foreach (var updateObjectPacket in list.Cast<UpdateObjectPacket>().Where(updateObjectPacket => updateObjectPacket.creatureGuid == guid))
+            //return list.First(x => x.creatureGuid == guid);
+            foreach (var updateObjectPacket in list.Where(updateObjectPacket => updateObjectPacket.creatureGuid == guid))
             {
                 return updateObjectPacket;
             }
@@ -144,7 +145,7 @@ namespace WoWDeveloperAssistant.Misc
             return packetsCount;
         }
 
-        public static void AddSourceFromEmotePacket(this SortedDictionary<long, Packet> dict, EmotePacket emotePacket, long index)
+        public static void AddSourceFromEmotePacket(this SortedDictionary<long, SMSG_EMOTE_Packet> dict, EmotePacket emotePacket, long index)
         {
             foreach (var packet in dict.Values.Where(packet => packet.packetType == Packet.PacketTypes.SMSG_EMOTE && packet.index == index))
             {
@@ -153,7 +154,7 @@ namespace WoWDeveloperAssistant.Misc
             }
         }
 
-        public static void AddSourceFromAuraUpdatePacket(this SortedDictionary<long, Packet> dict, AuraUpdatePacket auraPacket, long index)
+        public static void AddSourceFromAuraUpdatePacket(this SortedDictionary<long, SMSG_AURA_UPDATE_Packet> dict, AuraUpdatePacket auraPacket, long index)
         {
             foreach (var packet in dict.Values.Where(packet => packet.packetType == Packet.PacketTypes.SMSG_AURA_UPDATE && packet.index == index))
             {
@@ -162,7 +163,7 @@ namespace WoWDeveloperAssistant.Misc
             }
         }
 
-        public static void AddSourceFromSpellPacket(this SortedDictionary<long, Packet> dict, SpellStartPacket spellPacket, long index)
+        public static void AddSourceFromSpellPacket(this SortedDictionary<long, SMSG_SPELL_START_Packet> dict, SpellStartPacket spellPacket, long index)
         {
             foreach (var packet in dict.Values.Where(packet => packet.packetType == Packet.PacketTypes.SMSG_SPELL_START && packet.index == index))
             {
@@ -171,7 +172,7 @@ namespace WoWDeveloperAssistant.Misc
             }
         }
 
-        public static void AddSourceFromMovementPacket(this SortedDictionary<long, Packet> dict, MonsterMovePacket movementPacket, long index)
+        public static void AddSourceFromMovementPacket(this SortedDictionary<long, SMSG_ON_MONSTER_MOVE_Packet> dict, MonsterMovePacket movementPacket, long index)
         {
             foreach (var packet in dict.Values.Where(packet => packet.packetType == Packet.PacketTypes.SMSG_ON_MONSTER_MOVE && packet.index == index))
             {
@@ -180,7 +181,7 @@ namespace WoWDeveloperAssistant.Misc
             }
         }
 
-        public static void AddSourceFromUpdatePacket(this SortedDictionary<long, Packet> dict, UpdateObjectPacket updatePacket, long index)
+        public static void AddSourceFromUpdatePacket(this SortedDictionary<long, SMSG_UPDATE_OBJECT_Packet> dict, UpdateObjectPacket updatePacket, long index)
         {
             foreach (var packet in dict.Values.Where(packet => packet.packetType == Packet.PacketTypes.SMSG_UPDATE_OBJECT && packet.index == index))
             {
@@ -189,7 +190,7 @@ namespace WoWDeveloperAssistant.Misc
             }
         }
 
-        public static void AddSourceFromAttackStopPacket(this SortedDictionary<long, Packet> dict, AttackStopPacket attackStopPacket, long index)
+        public static void AddSourceFromAttackStopPacket(this SortedDictionary<long, SMSG_ATTACK_STOP_Packet> dict, AttackStopPacket attackStopPacket, long index)
         {
             foreach (var packet in dict.Values.Where(packet => packet.packetType == Packet.PacketTypes.SMSG_ATTACK_STOP && packet.index == index))
             {
@@ -198,7 +199,7 @@ namespace WoWDeveloperAssistant.Misc
             }
         }
 
-        public static void AddSourceFromSetAiAnimKitPacket(this SortedDictionary<long, Packet> dict, SetAiAnimKitPacket animKitPacket, long index)
+        public static void AddSourceFromSetAiAnimKitPacket(this SortedDictionary<long, SMSG_SET_AI_ANIM_KIT_Packet> dict, SetAiAnimKitPacket animKitPacket, long index)
         {
             foreach (var packet in dict.Values.Where(packet => packet.packetType == Packet.PacketTypes.SMSG_SET_AI_ANIM_KIT && packet.index == index))
             {

@@ -262,15 +262,12 @@ namespace WoWDeveloperAssistant.Database_Advisor
         public static void GetCreatureFlags(string creatureEntry)
         {
             DataSet unitFlagsDs = new DataSet();
-            DataSet typeFlagsDs = new DataSet();
-            string unitFlagsSqlQuery = "SELECT `npcflag`, `npcflag2`, `unit_flags`, `unit_flags2`, `unit_flags3`, `dynamicflags`, `flags_extra` FROM `creature_template` WHERE `entry` = " + creatureEntry + ";";
-            string typeFlagsSqlQuery = "SELECT `TypeFlags`, `TypeFlags2` FROM `creature_template_wdb` WHERE `entry` = " + creatureEntry + ";";
+            string unitFlagsSqlQuery = "SELECT `npcflag`, `npcflag2`, `unit_flags`, `unit_flags2`, `dynamicflags`, `flags_extra`, `TypeFlags`, `TypeFlags2` FROM `creature_template` WHERE `entry` = " + creatureEntry + ";";
             unitFlagsDs = SQLModule.DatabaseSelectQuery(unitFlagsSqlQuery);
-            typeFlagsDs = SQLModule.DatabaseSelectQuery(typeFlagsSqlQuery);
-            if (unitFlagsDs == null || typeFlagsDs == null)
+            if (unitFlagsDs == null)
                 return;
 
-            if (unitFlagsDs.Tables["table"].Rows.Count == 0 || typeFlagsDs.Tables["table"].Rows.Count == 0)
+            if (unitFlagsDs.Tables["table"].Rows.Count == 0)
             {
                 MessageBox.Show("Creature doesn't exists in your database!");
                 return;
@@ -280,11 +277,10 @@ namespace WoWDeveloperAssistant.Database_Advisor
             long npcFlags2 = Convert.ToInt64(unitFlagsDs.Tables["table"].Rows[0][1].ToString());
             long unitFlags = Convert.ToInt64(unitFlagsDs.Tables["table"].Rows[0][2].ToString());
             long unitFlags2 = Convert.ToInt64(unitFlagsDs.Tables["table"].Rows[0][3].ToString());
-            long unitFlags3 = Convert.ToInt64(unitFlagsDs.Tables["table"].Rows[0][4].ToString());
-            long dynamicFlags = Convert.ToInt64(unitFlagsDs.Tables["table"].Rows[0][5].ToString());
-            long extraFlags = Convert.ToInt64(unitFlagsDs.Tables["table"].Rows[0][6].ToString());
-            long typeFlags = Convert.ToInt64(typeFlagsDs.Tables["table"].Rows[0][0].ToString());
-            long typeFlags2 = Convert.ToInt64(typeFlagsDs.Tables["table"].Rows[0][1].ToString());
+            long dynamicFlags = Convert.ToInt64(unitFlagsDs.Tables["table"].Rows[0][4].ToString());
+            long extraFlags = Convert.ToInt64(unitFlagsDs.Tables["table"].Rows[0][5].ToString());
+            long typeFlags = Convert.ToInt64(unitFlagsDs.Tables["table"].Rows[0][6].ToString());
+            long typeFlags2 = Convert.ToInt64(unitFlagsDs.Tables["table"].Rows[0][7].ToString());
 
             List<long> npcFlagsList = new List<long>();
             List<long> npcFlags2List = new List<long>();
@@ -352,21 +348,6 @@ namespace WoWDeveloperAssistant.Database_Advisor
                     {
                         unitFlags2List.Add(flag);
                         unitFlags2 -= flag;
-                    }
-                }
-            }
-
-            if (unitFlags3 != 0)
-            {
-                var flagsArray = Enum.GetValues(typeof(UnitFlags3));
-                Array.Reverse(flagsArray);
-
-                foreach (long flag in flagsArray)
-                {
-                    if (unitFlags3 - flag >= 0)
-                    {
-                        unitFlags3List.Add(flag);
-                        unitFlags3 -= flag;
                     }
                 }
             }

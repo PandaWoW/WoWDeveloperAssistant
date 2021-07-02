@@ -43,7 +43,7 @@ namespace WoWDeveloperAssistant
         {
             Dictionary<uint, string> namesDict = new Dictionary<uint, string>();
 
-            string creatureNameQuery = "SELECT `entry`, `Name1` FROM `creature_template_wdb`;";
+            string creatureNameQuery = "SELECT `entry`, `Name` FROM `creature_template`;";
             var creatureNameDs = Properties.Settings.Default.UsingDB ? SQLModule.DatabaseSelectQuery(creatureNameQuery) : null;
 
             if (creatureNameDs != null)

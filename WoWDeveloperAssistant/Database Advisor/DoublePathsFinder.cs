@@ -173,7 +173,7 @@ namespace WoWDeveloperAssistant.Database_Advisor
             try
             {
                 uint creatureEntry = (uint)creatureDatas[linkedId][1];
-                string creatureName = (string)SQLModule.DatabaseSelectQuery($"SELECT `Name1` FROM `creature_template_wdb` WHERE `entry` = {creatureEntry}").Tables["table"].Rows[0].ItemArray[0];
+                string creatureName = (string)SQLModule.DatabaseSelectQuery($"SELECT `Name` FROM `creature_template` WHERE `entry` = {creatureEntry}").Tables["table"].Rows[0].ItemArray[0];
                 return creatureData += $"Entry: {creatureEntry}, Name: {creatureName}";
             }
             catch

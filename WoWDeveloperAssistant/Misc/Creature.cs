@@ -386,7 +386,7 @@ namespace WoWDeveloperAssistant.Misc
             if (!Properties.Settings.Default.UsingDB)
                 return false;
 
-            var creatureTemplateWdbDs = SQLModule.DatabaseSelectQuery("SELECT `Type` FROM `creature_template_wdb` WHERE `entry` = " + entry + ";");
+            var creatureTemplateWdbDs = SQLModule.DatabaseSelectQuery("SELECT `Type` FROM `creature_template` WHERE `entry` = " + entry + ";");
 
             if (creatureTemplateWdbDs != null && creatureTemplateWdbDs.Tables["table"].Rows.Count > 0)
             {

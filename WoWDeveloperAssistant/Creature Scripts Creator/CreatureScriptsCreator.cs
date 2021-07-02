@@ -426,7 +426,7 @@ namespace WoWDeveloperAssistant.Creature_Scripts_Creator
             string defaultName = "";
             string scriptName = "";
 
-            string creatureNameQuery = $"SELECT `Name1` FROM `creature_template_wdb` WHERE `entry` = {creature.entry};";
+            string creatureNameQuery = $"SELECT `Name` FROM `creature_template` WHERE `entry` = {creature.entry};";
             var creatureNameDs = Properties.Settings.Default.UsingDB ? SQLModule.DatabaseSelectQuery(creatureNameQuery) : null;
 
             if (creatureNameDs != null)

@@ -45,9 +45,13 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
 
             mainForm.SetCurrentStatus("Searching for packet indexes in lines...");
 
+            bool scripts = Properties.Settings.Default.Scripts;
+
             Parallel.For(0, lines.Length, index =>
             {
-                if (Packet.GetPacketTypeFromLine(lines[index]) == Packet.PacketTypes.SMSG_UPDATE_OBJECT)
+                Packet.PacketTypes type = Packet.GetPacketTypeFromLine(lines[index]);
+
+                if (type == Packet.PacketTypes.SMSG_UPDATE_OBJECT)
                 {
                     TimeSpan sendTime = LineGetters.GetTimeSpanFromLine(lines[index]);
                     if (sendTime != TimeSpan.Zero)
@@ -59,7 +63,7 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
                         }
                     }
                 }
-                else if (Packet.GetPacketTypeFromLine(lines[index]) == Packet.PacketTypes.SMSG_ON_MONSTER_MOVE)
+                else if (type == Packet.PacketTypes.SMSG_ON_MONSTER_MOVE)
                 {
                     TimeSpan sendTime = LineGetters.GetTimeSpanFromLine(lines[index]);
                     if (sendTime != TimeSpan.Zero)
@@ -71,7 +75,7 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
                         }
                     }
                 }
-                else if (Properties.Settings.Default.Scripts && Packet.GetPacketTypeFromLine(lines[index]) == Packet.PacketTypes.SMSG_SPELL_START)
+                else if (scripts && type == Packet.PacketTypes.SMSG_SPELL_START)
                 {
                     TimeSpan sendTime = LineGetters.GetTimeSpanFromLine(lines[index]);
                     if (sendTime != TimeSpan.Zero)
@@ -83,7 +87,7 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
                         }
                     }
                 }
-                else if (Properties.Settings.Default.Scripts && Packet.GetPacketTypeFromLine(lines[index]) == Packet.PacketTypes.SMSG_AURA_UPDATE)
+                else if (scripts && type == Packet.PacketTypes.SMSG_AURA_UPDATE)
                 {
                     TimeSpan sendTime = LineGetters.GetTimeSpanFromLine(lines[index]);
                     if (sendTime != TimeSpan.Zero)
@@ -95,7 +99,7 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
                         }
                     }
                 }
-                else if (Properties.Settings.Default.Scripts && Packet.GetPacketTypeFromLine(lines[index]) == Packet.PacketTypes.SMSG_EMOTE)
+                else if (scripts && type == Packet.PacketTypes.SMSG_EMOTE)
                 {
                     TimeSpan sendTime = LineGetters.GetTimeSpanFromLine(lines[index]);
                     if (sendTime != TimeSpan.Zero)
@@ -107,7 +111,7 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
                         }
                     }
                 }
-                else if (Properties.Settings.Default.Scripts && Packet.GetPacketTypeFromLine(lines[index]) == Packet.PacketTypes.SMSG_SET_AI_ANIM_KIT)
+                else if (scripts && type == Packet.PacketTypes.SMSG_SET_AI_ANIM_KIT)
                 {
                     TimeSpan sendTime = LineGetters.GetTimeSpanFromLine(lines[index]);
                     if (sendTime != TimeSpan.Zero)
@@ -119,7 +123,7 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
                         }
                     }
                 }
-                else if (Packet.GetPacketTypeFromLine(lines[index]) == Packet.PacketTypes.SMSG_ATTACK_STOP)
+                else if (type == Packet.PacketTypes.SMSG_ATTACK_STOP)
                 {
                     TimeSpan sendTime = LineGetters.GetTimeSpanFromLine(lines[index]);
                     if (sendTime != TimeSpan.Zero)

@@ -643,8 +643,7 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
             string linkedId = creaturesDict[guid].GetLinkedId();
             bool alreadyHaveWaypointsOrRelatedToFormation = false;
 
-            string formationSqlQuery = "SELECT `leaderLinkedId`, `memberLinkedId` FROM `creature_formations` WHERE `leaderLinkedId` = '" + linkedId + "' OR " + "`memberLinkedId` = '" + linkedId + "';";
-            var creatureFormationDs = Properties.Settings.Default.UsingDB ? SQLModule.DatabaseSelectQuery(formationSqlQuery) : null;
+            DataSet creatureFormationDs = Properties.Settings.Default.UsingDB ? SQLModule.DatabaseSelectQuery("SELECT `leaderLinkedId`, `memberLinkedId` FROM `creature_formations` WHERE `leaderLinkedId` = '" + linkedId + "' OR " + "`memberLinkedId` = '" + linkedId + "';") : null;
 
             if (creatureFormationDs != null && creatureFormationDs.Tables["table"].Rows.Count > 0)
             {
@@ -661,8 +660,7 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
 
             if (!alreadyHaveWaypointsOrRelatedToFormation)
             {
-                string addonSqlQuery = "SELECT `path_id` FROM `creature_addon` WHERE `linked_id` = '" + linkedId + "';";
-                var creatureAddonDs = Properties.Settings.Default.UsingDB ? SQLModule.DatabaseSelectQuery(addonSqlQuery) : null;
+                DataSet creatureAddonDs = Properties.Settings.Default.UsingDB ? SQLModule.DatabaseSelectQuery("SELECT `path_id` FROM `creature_addon` WHERE `linked_id` = '" + linkedId + "';") : null;
 
                 if (creatureAddonDs != null && creatureAddonDs.Tables["table"].Rows.Count > 0)
                 {
@@ -684,8 +682,7 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
         {
             string linkedId = creaturesDict[guid].GetLinkedId();
 
-            string creatureQuery = "SELECT `linked_id` FROM `creature` WHERE `linked_id` = '" + linkedId + "';";
-            var creatureDs = Properties.Settings.Default.UsingDB ? SQLModule.DatabaseSelectQuery(creatureQuery) : null;
+            DataSet creatureDs = Properties.Settings.Default.UsingDB ? SQLModule.DatabaseSelectQuery("SELECT `linked_id` FROM `creature` WHERE `linked_id` = '" + linkedId + "';") : null;
 
             if (creatureDs != null && creatureDs.Tables["table"].Rows.Count > 0)
                 return true;
@@ -699,11 +696,8 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
 
             string linkedIds = GetLinkedIdsFromGuids();
 
-            string formationSqlQuery = "SELECT `leaderLinkedId`, `memberLinkedId` FROM `creature_formations` WHERE `leaderLinkedId` IN (" + linkedIds + ") OR " + "`memberLinkedId` IN (" + linkedIds + ");";
-            string addonSqlQuery = "SELECT `linked_id` FROM `creature_addon` WHERE `linked_id` IN (" + linkedIds + ") AND `path_id` != 0;";
-
-            var creatureFormationsDs = Properties.Settings.Default.UsingDB ? SQLModule.DatabaseSelectQuery(formationSqlQuery) : null;
-            var creatureAddonDs = Properties.Settings.Default.UsingDB ? SQLModule.DatabaseSelectQuery(addonSqlQuery) : null;
+            DataSet creatureFormationsDs = Properties.Settings.Default.UsingDB ? SQLModule.DatabaseSelectQuery("SELECT `leaderLinkedId`, `memberLinkedId` FROM `creature_formations` WHERE `leaderLinkedId` IN (" + linkedIds + ") OR " + "`memberLinkedId` IN (" + linkedIds + ");") : null;
+            DataSet creatureAddonDs = Properties.Settings.Default.UsingDB ? SQLModule.DatabaseSelectQuery("SELECT `linked_id` FROM `creature_addon` WHERE `linked_id` IN (" + linkedIds + ") AND `path_id` != 0;") : null;
 
             if (creatureFormationsDs != null && creatureFormationsDs.Tables["table"].Rows.Count > 0)
             {
@@ -1026,10 +1020,9 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
         public void CreateSQL()
         {
             Creature creature = creaturesDict[mainForm.listBox_WaypointsCreator_CreatureGuids.SelectedItem.ToString()];
-            string sqlQuery = "SELECT * FROM `creature_addon` WHERE `linked_id` = '" + creature.GetLinkedId() + "';";
             string creatureAddon;
             bool addonFound = false;
-            var creatureAddonDs = Properties.Settings.Default.UsingDB ? SQLModule.DatabaseSelectQuery(sqlQuery) : null;
+            DataSet creatureAddonDs = Properties.Settings.Default.UsingDB ? SQLModule.DatabaseSelectQuery($"SELECT * FROM `creature_addon` WHERE `linked_id` = '{creature.GetLinkedId()}';") : null;
 
             if (creatureAddonDs != null && creatureAddonDs.Tables["table"].Rows.Count > 0)
             {

@@ -59,7 +59,7 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
                         lock (updateObjectPacketsDict)
                         {
                             if (!updateObjectPacketsDict.ContainsKey(index))
-                                updateObjectPacketsDict.Add(index, new Packet(Packet.PacketTypes.SMSG_UPDATE_OBJECT, sendTime, index, new List<object>()));
+                                updateObjectPacketsDict.Add(index, new Packet(Packet.PacketTypes.SMSG_UPDATE_OBJECT, sendTime, index));
                         }
                     }
                 }
@@ -71,7 +71,7 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
                         lock (movementPacketsDict)
                         {
                             if (!movementPacketsDict.ContainsKey(index))
-                                movementPacketsDict.Add(index, new Packet(Packet.PacketTypes.SMSG_ON_MONSTER_MOVE, sendTime, index, new List<object>()));
+                                movementPacketsDict.Add(index, new Packet(Packet.PacketTypes.SMSG_ON_MONSTER_MOVE, sendTime, index));
                         }
                     }
                 }
@@ -83,7 +83,7 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
                         lock (spellPacketsDict)
                         {
                             if (!spellPacketsDict.ContainsKey(index))
-                                spellPacketsDict.Add(index, new Packet(Packet.PacketTypes.SMSG_SPELL_START, sendTime, index, new List<object>()));
+                                spellPacketsDict.Add(index, new Packet(Packet.PacketTypes.SMSG_SPELL_START, sendTime, index));
                         }
                     }
                 }
@@ -95,7 +95,7 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
                         lock (auraPacketsDict)
                         {
                             if (!auraPacketsDict.ContainsKey(index))
-                                auraPacketsDict.Add(index, new Packet(Packet.PacketTypes.SMSG_AURA_UPDATE, sendTime, index, new List<object>()));
+                                auraPacketsDict.Add(index, new Packet(Packet.PacketTypes.SMSG_AURA_UPDATE, sendTime, index));
                         }
                     }
                 }
@@ -107,7 +107,7 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
                         lock (emotePacketsDict)
                         {
                             if (!emotePacketsDict.ContainsKey(index))
-                                emotePacketsDict.Add(index, new Packet(Packet.PacketTypes.SMSG_EMOTE, sendTime, index, new List<object>()));
+                                emotePacketsDict.Add(index, new Packet(Packet.PacketTypes.SMSG_EMOTE, sendTime, index));
                         }
                     }
                 }
@@ -119,7 +119,7 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
                         lock (animKitPacketsDict)
                         {
                             if (!animKitPacketsDict.ContainsKey(index))
-                                animKitPacketsDict.Add(index, new Packet(Packet.PacketTypes.SMSG_SET_AI_ANIM_KIT, sendTime, index, new List<object>()));
+                                animKitPacketsDict.Add(index, new Packet(Packet.PacketTypes.SMSG_SET_AI_ANIM_KIT, sendTime, index));
                         }
                     }
                 }
@@ -131,7 +131,7 @@ namespace WoWDeveloperAssistant.Waypoints_Creator
                         lock (attackStopPacketsDict)
                         {
                             if (!attackStopPacketsDict.ContainsKey(index))
-                                attackStopPacketsDict.Add(index, new Packet(Packet.PacketTypes.SMSG_ATTACK_STOP, sendTime, index, new List<object>()));
+                                attackStopPacketsDict.Add(index, new Packet(Packet.PacketTypes.SMSG_ATTACK_STOP, sendTime, index));
                         }
                     }
                 }

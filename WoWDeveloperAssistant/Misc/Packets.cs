@@ -13,15 +13,20 @@ namespace WoWDeveloperAssistant.Misc
     public static class Packets
     {
         [Serializable]
-        public struct Packet
+        public class Packet
         {
             public PacketTypes packetType;
             public TimeSpan sendTime;
             public long index;
             public List<object> parsedPacketsList;
 
-            public Packet(PacketTypes type, TimeSpan time, long index, List<object> parsedList)
-            { packetType = type; sendTime = time; this.index = index; parsedPacketsList = parsedList; }
+            public Packet(PacketTypes type, TimeSpan time, long index)
+            {
+                packetType = type;
+                sendTime = time;
+                this.index = index;
+                parsedPacketsList = new List<object>();
+            }
 
             public enum PacketTypes : byte
             {

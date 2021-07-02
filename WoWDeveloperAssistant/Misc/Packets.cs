@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 using WoWDeveloperAssistant.Creature_Scripts_Creator;
 using WoWDeveloperAssistant.Waypoints_Creator;
 using static WoWDeveloperAssistant.Database_Advisor.CreatureFlagsAdvisor;
-using static WoWDeveloperAssistant.Misc.Packets.Packet;
 using static WoWDeveloperAssistant.Misc.Utils;
 
 namespace WoWDeveloperAssistant.Misc
@@ -19,12 +18,14 @@ namespace WoWDeveloperAssistant.Misc
             public PacketTypes packetType;
             public TimeSpan sendTime;
             public long index;
+            public List<object> parsedPacketsList;
 
             public Packet(PacketTypes type, TimeSpan time, long index)
             {
                 packetType = type;
                 sendTime = time;
                 this.index = index;
+                parsedPacketsList = new List<object>();
             }
 
             public enum PacketTypes : byte
@@ -64,8 +65,78 @@ namespace WoWDeveloperAssistant.Misc
                 return packetType;
             }
 
-            public virtual bool HasCreatureWithGuid(string guid)
+            public bool HasCreatureWithGuid(string guid)
             {
+                if (parsedPacketsList.Count == 0)
+                    return false;
+
+                switch (packetType)
+                {
+                    case PacketTypes.SMSG_UPDATE_OBJECT:
+                    {
+                        if (parsedPacketsList.Cast<UpdateObjectPacket>().Any(updatePacket => updatePacket.creatureGuid == guid))
+                        {
+                            return true;
+                        }
+
+                        break;
+                    }
+                    case PacketTypes.SMSG_ON_MONSTER_MOVE:
+                    {
+                        if (parsedPacketsList.Cast<MonsterMovePacket>().Any(movementPacket => movementPacket.creatureGuid == guid))
+                        {
+                            return true;
+                        }
+
+                        break;
+                    }
+                    case PacketTypes.SMSG_SPELL_START:
+                    {
+                        if (parsedPacketsList.Cast<SpellStartPacket>().Any(spellPacket => spellPacket.casterGuid == guid))
+                        {
+                            return true;
+                        }
+
+                        break;
+                    }
+                    case PacketTypes.SMSG_AURA_UPDATE:
+                    {
+                        if (parsedPacketsList.Cast<AuraUpdatePacket>().Any(auraPacket => auraPacket.unitGuid == guid))
+                        {
+                            return true;
+                        }
+
+                        break;
+                    }
+                    case PacketTypes.SMSG_EMOTE:
+                    {
+                        if (parsedPacketsList.Cast<EmotePacket>().Any(emotePacket => emotePacket.guid == guid))
+                        {
+                            return true;
+                        }
+
+                        break;
+                    }
+                    case PacketTypes.SMSG_ATTACK_STOP:
+                    {
+                        if (parsedPacketsList.Cast<AttackStopPacket>().Any(attackStopPacket => attackStopPacket.creatureGuid == guid))
+                        {
+                            return true;
+                        }
+
+                        break;
+                    }
+                    case PacketTypes.SMSG_SET_AI_ANIM_KIT:
+                    {
+                        if (parsedPacketsList.Cast<SetAiAnimKitPacket>().Any(animKitPacket => animKitPacket.guid == guid))
+                        {
+                            return true;
+                        }
+
+                        break;
+                    }
+                }
+
                 return false;
             }
 
@@ -82,139 +153,8 @@ namespace WoWDeveloperAssistant.Misc
             }
         }
 
-        public class SMSG_UPDATE_OBJECT_Packet : Packet
-        {
-            public List<UpdateObjectPacket> parsedPacketsList;
-
-            public SMSG_UPDATE_OBJECT_Packet(TimeSpan time, long index) : base(PacketTypes.SMSG_UPDATE_OBJECT, time, index)
-            {
-                parsedPacketsList = new List<UpdateObjectPacket>();
-            }
-
-            public override bool HasCreatureWithGuid(string guid)
-            {
-                if (parsedPacketsList.Count != 0 && parsedPacketsList.Any(updatePacket => updatePacket.creatureGuid == guid))
-                    return true;
-
-                return false;
-            }
-        }
-
-        public class SMSG_ON_MONSTER_MOVE_Packet : Packet
-        {
-            public List<MonsterMovePacket> parsedPacketsList;
-
-            public SMSG_ON_MONSTER_MOVE_Packet(TimeSpan time, long index) : base(PacketTypes.SMSG_ON_MONSTER_MOVE, time, index)
-            {
-                parsedPacketsList = new List<MonsterMovePacket>();
-            }
-
-            public override bool HasCreatureWithGuid(string guid)
-            {
-                if (parsedPacketsList.Count != 0 && parsedPacketsList.Any(updatePacket => updatePacket.creatureGuid == guid))
-                    return true;
-
-                return false;
-            }
-        }
-
-        public class SMSG_SPELL_START_Packet : Packet
-        {
-            public List<SpellStartPacket> parsedPacketsList;
-
-            public SMSG_SPELL_START_Packet(TimeSpan time, long index) : base(PacketTypes.SMSG_SPELL_START, time, index)
-            {
-                parsedPacketsList = new List<SpellStartPacket>();
-            }
-
-            public override bool HasCreatureWithGuid(string guid)
-            {
-                if (parsedPacketsList.Count != 0 && parsedPacketsList.Any(updatePacket => updatePacket.casterGuid == guid))
-                    return true;
-
-                return false;
-            }
-        }
-
-        public class SMSG_AURA_UPDATE_Packet : Packet
-        {
-            public List<AuraUpdatePacket> parsedPacketsList;
-
-            public SMSG_AURA_UPDATE_Packet(TimeSpan time, long index) : base(PacketTypes.SMSG_AURA_UPDATE, time, index)
-            {
-                parsedPacketsList = new List<AuraUpdatePacket>();
-            }
-
-            public override bool HasCreatureWithGuid(string guid)
-            {
-                if (parsedPacketsList.Count != 0 && parsedPacketsList.Any(updatePacket => updatePacket.unitGuid == guid))
-                    return true;
-
-                return false;
-            }
-        }
-
-        public class SMSG_EMOTE_Packet : Packet
-        {
-            public List<EmotePacket> parsedPacketsList;
-
-            public SMSG_EMOTE_Packet(TimeSpan time, long index) : base(PacketTypes.SMSG_EMOTE, time, index)
-            {
-                parsedPacketsList = new List<EmotePacket>();
-            }
-
-            public override bool HasCreatureWithGuid(string guid)
-            {
-                if (parsedPacketsList.Count != 0 && parsedPacketsList.Any(updatePacket => updatePacket.guid == guid))
-                    return true;
-
-                return false;
-            }
-        }
-
-        public class SMSG_ATTACK_STOP_Packet : Packet
-        {
-            public List<AttackStopPacket> parsedPacketsList;
-
-            public SMSG_ATTACK_STOP_Packet(TimeSpan time, long index) : base(PacketTypes.SMSG_ATTACK_STOP, time, index)
-            {
-                parsedPacketsList = new List<AttackStopPacket>();
-            }
-
-            public override bool HasCreatureWithGuid(string guid)
-            {
-                if (parsedPacketsList.Count != 0 && parsedPacketsList.Any(updatePacket => updatePacket.creatureGuid == guid))
-                    return true;
-
-                return false;
-            }
-        }
-
-        public class SMSG_SET_AI_ANIM_KIT_Packet : Packet
-        {
-            public List<SetAiAnimKitPacket> parsedPacketsList;
-
-            public SMSG_SET_AI_ANIM_KIT_Packet(TimeSpan time, long index) : base(PacketTypes.SMSG_SET_AI_ANIM_KIT, time, index)
-            {
-                parsedPacketsList = new List<SetAiAnimKitPacket>();
-            }
-
-            public override bool HasCreatureWithGuid(string guid)
-            {
-                if (parsedPacketsList.Count != 0 && parsedPacketsList.Any(updatePacket => updatePacket.guid == guid))
-                    return true;
-
-                return false;
-            }
-        }
-
-        public interface IBasePacket
-        {
-
-        }
-
         [Serializable]
-        public struct SpellStartPacket : IBasePacket
+        public struct SpellStartPacket
         {
             public string casterGuid;
             public uint spellId;
@@ -328,7 +268,7 @@ namespace WoWDeveloperAssistant.Misc
         };
 
         [Serializable]
-        public struct ChatPacket : IBasePacket
+        public struct ChatPacket
         {
             public string creatureGuid;
             public uint creatureEntry;
@@ -380,7 +320,7 @@ namespace WoWDeveloperAssistant.Misc
         }
 
         [Serializable]
-        public struct UpdateObjectPacket : IBasePacket
+        public struct UpdateObjectPacket
         {
             public uint creatureEntry;
             public string creatureGuid;
@@ -751,7 +691,7 @@ namespace WoWDeveloperAssistant.Misc
         }
 
         [Serializable]
-        public struct MonsterMovePacket : IBasePacket
+        public struct MonsterMovePacket
         {
             public string creatureGuid;
             public float creatureOrientation;
@@ -1043,7 +983,7 @@ namespace WoWDeveloperAssistant.Misc
                 return movePacket;
             }
 
-            public static MonsterMovePacket ParseMovementPacket(string[] lines, long index, BuildVersions buildVersion, SortedDictionary<long, SMSG_UPDATE_OBJECT_Packet> updateObjectPacketsDict)
+            public static MonsterMovePacket ParseMovementPacket(string[] lines, long index, BuildVersions buildVersion, SortedDictionary<long, Packet> updateObjectPacketsDict)
             {
                 MonsterMovePacket movePacket = new MonsterMovePacket("", 0.0f, LineGetters.GetTimeSpanFromLine(lines[index]), new List<Waypoint>(), 0, new Position(), new JumpInfo());
 
@@ -1053,16 +993,16 @@ namespace WoWDeveloperAssistant.Misc
                     {
                         string guid = LineGetters.GetGuidFromLine(lines[index + 1], buildVersion, moverGuid: true);
 
-                        List<SMSG_UPDATE_OBJECT_Packet> updateObjectPackets = updateObjectPacketsDict.Values.Where(x => x.HasCreatureWithGuid(guid)).OrderBy(x => (uint)x.sendTime.TotalSeconds).ToList();
+                        List<Packet> updateObjectPackets = updateObjectPacketsDict.Values.Where(x => x.HasCreatureWithGuid(guid)).OrderBy(x => (uint)x.sendTime.TotalSeconds).ToList();
 
-                        foreach (SMSG_UPDATE_OBJECT_Packet packet in updateObjectPackets)
+                        foreach (Packet packet in updateObjectPacketsDict.Values.Where(x => x.HasCreatureWithGuid(guid)).OrderBy(x => (uint)x.sendTime.TotalSeconds))
                         {
-                            UpdateObjectPacket updatePacketFirst = packet.parsedPacketsList.First(x => x.creatureGuid == guid);
+                            UpdateObjectPacket updatePacketFirst = (UpdateObjectPacket)packet.parsedPacketsList.First(x => ((UpdateObjectPacket)x).creatureGuid == guid);
                             if ((updatePacketFirst.unitFlags & UnitFlags.UNIT_FLAG_IN_COMBAT) != 0)
                             {
                                 for (int i = updateObjectPackets.Count() - 1; i >= 0; i--)
                                 {
-                                    UpdateObjectPacket updatePacketSecond = updateObjectPackets[i].parsedPacketsList.First(x => x.creatureGuid == guid);
+                                    UpdateObjectPacket updatePacketSecond = (UpdateObjectPacket)updateObjectPackets[i].parsedPacketsList.First(x => ((UpdateObjectPacket)x).creatureGuid == guid);
                                     if ((uint)updatePacketSecond.packetSendTime.TotalSeconds < (uint)movePacket.packetSendTime.TotalSeconds)
                                     {
                                         if ((updatePacketSecond.unitFlags & UnitFlags.UNIT_FLAG_IN_COMBAT) != 0)
@@ -1206,7 +1146,7 @@ namespace WoWDeveloperAssistant.Misc
         }
 
         [Serializable]
-        public struct AttackStopPacket : IBasePacket
+        public struct AttackStopPacket
         {
             public string creatureGuid;
             public bool nowDead;
@@ -1249,7 +1189,7 @@ namespace WoWDeveloperAssistant.Misc
         }
 
         [Serializable]
-        public struct TimePacket : IBasePacket
+        public struct TimePacket
         {
             public string hours;
             public string minutes;
@@ -1257,7 +1197,7 @@ namespace WoWDeveloperAssistant.Misc
         }
 
         [Serializable]
-        public struct AIReactionPacket : IBasePacket
+        public struct AIReactionPacket
         {
             public string creatureGuid;
             public uint creatureEntry;
@@ -1288,7 +1228,7 @@ namespace WoWDeveloperAssistant.Misc
         }
 
         [Serializable]
-        public struct AuraUpdatePacket : IBasePacket
+        public struct AuraUpdatePacket
         {
             public string unitGuid;
             public uint? slot;
@@ -1397,7 +1337,7 @@ namespace WoWDeveloperAssistant.Misc
         }
 
         [Serializable]
-        public struct EmotePacket : IBasePacket
+        public struct EmotePacket
         {
             public string guid;
             public uint emoteId;
@@ -1446,7 +1386,7 @@ namespace WoWDeveloperAssistant.Misc
         }
 
         [Serializable]
-        public struct SetAiAnimKitPacket : IBasePacket
+        public struct SetAiAnimKitPacket
         {
             public string guid;
             public uint? aiAnimKitId;

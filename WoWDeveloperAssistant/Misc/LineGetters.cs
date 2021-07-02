@@ -84,6 +84,23 @@ namespace WoWDeveloperAssistant.Misc
             return false;
         }
 
+        public static string GetPacketTimeFromStringInSeconds(string line)
+        {
+            if (timeRegex.IsMatch(line))
+            {
+                TimePacket packet;
+                string[] splittedLine = timeRegex.Match(line).ToString().Split(':');
+
+                packet.hours = splittedLine[0];
+                packet.minutes = splittedLine[1];
+                packet.seconds = splittedLine[2];
+
+                return ((Convert.ToUInt64(packet.hours) * 3600) + (Convert.ToUInt64(packet.minutes) * 60) + Convert.ToUInt64(packet.seconds)).ToString();
+            }
+
+            return "";
+        }
+
         public static BuildVersions GetBuildVersion(IEnumerable<string> lines)
         {
             foreach (var line in lines)
